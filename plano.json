@@ -1,0 +1,1305 @@
+{
+ "formato": "tiebreak-plano/1",
+ "id": "12s-2026-10",
+ "nome": "12 semanas: resistência e força",
+ "objetivo": "VO2max e resistência, com força para massa magra e o tênis.",
+ "inicio": "2026-10-12",
+ "principais": [
+  "tenis",
+  "A",
+  "B",
+  "C",
+  "int"
+ ],
+ "minimoSemana": 3,
+ "zonasInfo": {
+  "Z1": {
+   "nome": "Recuperação",
+   "sensacao": "Muito fácil"
+  },
+  "Z2": {
+   "nome": "Base",
+   "sensacao": "Conversa em frases completas"
+  },
+  "Z3": {
+   "nome": "Moderado",
+   "sensacao": "Frases curtas"
+  },
+  "Z4": {
+   "nome": "Limiar",
+   "sensacao": "Só palavras soltas"
+  },
+  "Z5": {
+   "nome": "VO2max",
+   "sensacao": "Não dá para falar"
+  }
+ },
+ "aquecimento": {
+  "dur": "8 min",
+  "passos": [
+   "3 min de remo ou bike, leve",
+   "3 voltas de mobilidade: quadril 90/90, rotação torácica e world's greatest stretch (3 por lado)",
+   "2 séries leves do primeiro exercício pesado do dia"
+  ]
+ },
+ "exercicios": {
+  "salto-caixa": {
+   "nome": "Salto na caixa",
+   "execucao": [
+    "Pés na largura do quadril, a um passo da caixa.",
+    "Braços para trás, agache rápido até um quarto e salte jogando os braços para cima.",
+    "Aterrisse suave no meio da caixa, joelhos alinhados com os pés.",
+    "Fique de pé em cima e desça andando, sem pular para trás."
+   ],
+   "erros": [
+    "Caixa alta demais, aterrissando em agachamento profundo.",
+    "Fazer com cansaço: cada salto tem que ser o melhor."
+   ],
+   "alternativas": [
+    "salto-vertical"
+   ],
+   "semCarga": true
+  },
+  "salto-vertical": {
+   "nome": "Salto vertical (sem caixa)",
+   "execucao": [
+    "Mesmo movimento do salto na caixa, saltando no lugar.",
+    "Aterrisse com os joelhos levemente dobrados e pare 2 s antes do próximo."
+   ],
+   "erros": [
+    "Emendar os saltos sem pausa: aqui o foco é potência, não cansaço."
+   ],
+   "alternativas": [
+    "salto-caixa"
+   ],
+   "semCarga": true
+  },
+  "agachamento-barra": {
+   "nome": "Agachamento livre com barra",
+   "execucao": [
+    "Barra apoiada no alto das costas, pés um pouco além da largura do quadril.",
+    "Encha o peito de ar e trave o abdômen antes de descer.",
+    "Desça empurrando os joelhos na direção dos pés até a coxa ficar paralela ou abaixo.",
+    "Suba empurrando o chão, mantendo o peito aberto."
+   ],
+   "erros": [
+    "Joelhos fechando para dentro na subida.",
+    "Calcanhar saindo do chão."
+   ],
+   "alternativas": [
+    "agachamento-goblet",
+    "leg-press"
+   ]
+  },
+  "agachamento-goblet": {
+   "nome": "Agachamento goblet",
+   "execucao": [
+    "Segure um halter na vertical junto ao peito.",
+    "Desça entre as pernas, cotovelos por dentro dos joelhos.",
+    "Suba empurrando o chão, tronco alto."
+   ],
+   "erros": [
+    "Deixar o halter afastar do peito."
+   ],
+   "alternativas": [
+    "agachamento-barra",
+    "leg-press"
+   ]
+  },
+  "leg-press": {
+   "nome": "Leg press 45°",
+   "execucao": [
+    "Pés no meio da plataforma, na largura do quadril.",
+    "Desça até os joelhos chegarem perto do peito sem a lombar sair do encosto.",
+    "Empurre com o pé inteiro, sem travar os joelhos no alto."
+   ],
+   "erros": [
+    "Descer tanto que o quadril enrola e a lombar descola."
+   ],
+   "alternativas": [
+    "agachamento-barra",
+    "agachamento-goblet"
+   ]
+  },
+  "terra-romeno": {
+   "nome": "Levantamento terra romeno",
+   "execucao": [
+    "De pé, barra na frente das coxas, joelhos levemente dobrados e fixos.",
+    "Leve o quadril para trás, deslizando a barra rente às pernas.",
+    "Desça até sentir alongar atrás da coxa, normalmente logo abaixo do joelho.",
+    "Volte empurrando o quadril para a frente e contraindo o glúteo."
+   ],
+   "erros": [
+    "Arredondar as costas para descer mais.",
+    "Transformar em agachamento dobrando muito os joelhos."
+   ],
+   "alternativas": [
+    "terra-romeno-halteres"
+   ]
+  },
+  "terra-romeno-halteres": {
+   "nome": "Terra romeno com halteres",
+   "execucao": [
+    "Mesmo movimento do romeno com barra, um halter em cada mão.",
+    "Halteres deslizando rente às pernas o tempo todo."
+   ],
+   "erros": [
+    "Deixar os halteres afastarem das pernas."
+   ],
+   "alternativas": [
+    "terra-romeno"
+   ]
+  },
+  "bulgaro-halteres": {
+   "nome": "Afundo búlgaro com halteres",
+   "lados": true,
+   "execucao": [
+    "Peito do pé de trás apoiado no banco, pé da frente cerca de um passo longo à frente.",
+    "Desça reto até o joelho de trás quase encostar no chão.",
+    "Suba empurrando com o calcanhar da perna da frente.",
+    "Tronco levemente inclinado à frente é normal."
+   ],
+   "erros": [
+    "Pé da frente perto demais do banco.",
+    "Joelho da frente caindo para dentro."
+   ],
+   "alternativas": [
+    "afundo-reverso"
+   ]
+  },
+  "afundo-reverso": {
+   "nome": "Afundo reverso com halteres",
+   "lados": true,
+   "execucao": [
+    "De pé, dê um passo longo para trás e desça até o joelho de trás quase tocar o chão.",
+    "Volte empurrando com a perna da frente."
+   ],
+   "erros": [
+    "Passo curto, jogando o joelho da frente muito à frente do pé."
+   ],
+   "alternativas": [
+    "bulgaro-halteres"
+   ]
+  },
+  "panturrilha-unilateral": {
+   "nome": "Panturrilha unilateral em pé",
+   "lados": true,
+   "execucao": [
+    "Ponta de um pé num degrau, segurando em algo para equilíbrio. Halter na mão do mesmo lado, se quiser carga.",
+    "Suba o máximo na ponta do pé e segure 1 s.",
+    "Desça em 3 s até o calcanhar ficar abaixo do degrau."
+   ],
+   "erros": [
+    "Quicar embaixo e perder a descida lenta."
+   ],
+   "alternativas": [
+    "panturrilha-maquina"
+   ]
+  },
+  "panturrilha-maquina": {
+   "nome": "Panturrilha na máquina ou no leg press",
+   "execucao": [
+    "Ponta dos pés na borda da plataforma, joelhos quase estendidos.",
+    "Suba o máximo, segure 1 s e desça em 3 s."
+   ],
+   "erros": [
+    "Amplitude curta."
+   ],
+   "alternativas": [
+    "panturrilha-unilateral"
+   ]
+  },
+  "copenhague": {
+   "nome": "Prancha de Copenhague",
+   "lados": true,
+   "execucao": [
+    "Deitada de lado, apoiada no antebraço. A perna de cima fica apoiada no banco, pelo joelho (mais fácil) ou pelo pé (mais difícil).",
+    "Levante o quadril até o corpo ficar em linha reta.",
+    "A perna de baixo pode ficar no chão ou subir junto.",
+    "Segure o tempo indicado e troque de lado."
+   ],
+   "erros": [
+    "Quadril caindo ou virando para a frente."
+   ],
+   "alternativas": [
+    "adutora-maquina"
+   ],
+   "semCarga": true
+  },
+  "adutora-maquina": {
+   "nome": "Cadeira adutora",
+   "execucao": [
+    "Ajuste a abertura para sentir alongar sem dor.",
+    "Feche as pernas em 1 s e volte em 2 s."
+   ],
+   "erros": [
+    "Deixar o peso bater no fim da volta."
+   ],
+   "alternativas": [
+    "copenhague"
+   ]
+  },
+  "pallof-cabo": {
+   "nome": "Pallof press no cabo",
+   "lados": true,
+   "execucao": [
+    "Cabo na altura do peito, de lado para a polia, pés na largura do quadril.",
+    "Mãos juntas no peito, empurre os braços à frente e segure 2 s.",
+    "O cabo tenta girar você; o abdômen não deixa.",
+    "Volte as mãos ao peito. Faça todas as repetições e troque de lado."
+   ],
+   "erros": [
+    "Girar o tronco ou o quadril.",
+    "Ficar perto demais da polia, sem tensão."
+   ],
+   "alternativas": [
+    "pallof-elastico"
+   ]
+  },
+  "pallof-elastico": {
+   "nome": "Pallof press com elástico",
+   "lados": true,
+   "execucao": [
+    "Mesmo movimento do Pallof no cabo, com o elástico preso num poste na altura do peito."
+   ],
+   "erros": [
+    "Elástico frouxo demais."
+   ],
+   "alternativas": [
+    "pallof-cabo"
+   ]
+  },
+  "lenhador-cabo": {
+   "nome": "Lenhador explosivo no cabo",
+   "lados": true,
+   "execucao": [
+    "Polia embaixo, de lado para ela, segurando a corda ou o pegador com as duas mãos.",
+    "Puxe na diagonal, de baixo para cima até acima do ombro oposto, girando quadril e pés juntos.",
+    "Subida rápida, como um golpe de direita ou esquerda.",
+    "Volte controlando em 2 s."
+   ],
+   "erros": [
+    "Girar só os braços, sem o quadril.",
+    "Carga pesada que tira a velocidade."
+   ],
+   "alternativas": [
+    "lenhador-elastico"
+   ]
+  },
+  "lenhador-elastico": {
+   "nome": "Lenhador com elástico",
+   "lados": true,
+   "execucao": [
+    "Mesmo movimento do lenhador no cabo, com o elástico preso embaixo."
+   ],
+   "erros": [
+    "Perder a velocidade na subida."
+   ],
+   "alternativas": [
+    "lenhador-cabo"
+   ]
+  },
+  "supino-halteres": {
+   "nome": "Supino reto com halteres",
+   "execucao": [
+    "Deitada no banco, pés firmes no chão, escápulas juntas e para baixo.",
+    "Halteres na linha do peito, cotovelos a cerca de 45° do corpo.",
+    "Desça até o halter chegar perto do peito.",
+    "Empurre para cima, aproximando os halteres no alto."
+   ],
+   "erros": [
+    "Cotovelos abertos a 90°, forçando o ombro.",
+    "Tirar o quadril do banco."
+   ],
+   "alternativas": [
+    "supino-maquina",
+    "flexao"
+   ]
+  },
+  "supino-maquina": {
+   "nome": "Supino na máquina",
+   "execucao": [
+    "Pegadores na altura do meio do peito.",
+    "Empurre sem tirar as escápulas do encosto e volte devagar."
+   ],
+   "erros": [
+    "Banco alto ou baixo demais, empurrando com o ombro."
+   ],
+   "alternativas": [
+    "supino-halteres",
+    "flexao"
+   ]
+  },
+  "flexao": {
+   "nome": "Flexão de braço",
+   "execucao": [
+    "Mãos um pouco além da largura dos ombros, corpo em linha reta.",
+    "Desça até o peito quase tocar o chão e suba.",
+    "Se ficar fácil demais, apoie os pés num banco."
+   ],
+   "erros": [
+    "Quadril caindo."
+   ],
+   "alternativas": [
+    "supino-halteres"
+   ],
+   "semCarga": true
+  },
+  "puxada-alta": {
+   "nome": "Puxada alta, pegada pronada",
+   "execucao": [
+    "Antes: 2 séries de 3 negativas na barra fixa. Suba com ajuda (pulo ou banco) e desça em 5 s.",
+    "Na máquina: pegada um pouco além dos ombros, palmas para a frente.",
+    "Peito aberto, puxe a barra até a parte de cima do peito levando os cotovelos para baixo.",
+    "Volte controlando até os braços quase estenderem."
+   ],
+   "erros": [
+    "Jogar o tronco para trás para puxar.",
+    "Puxar atrás da nuca."
+   ],
+   "alternativas": [
+    "puxada-neutra",
+    "remada-baixa"
+   ]
+  },
+  "puxada-neutra": {
+   "nome": "Puxada com pegada neutra",
+   "execucao": [
+    "Pegador em V ou neutro, palmas viradas uma para a outra.",
+    "Puxe até o peito levando os cotovelos para baixo e para trás."
+   ],
+   "erros": [
+    "Usar o embalo do tronco."
+   ],
+   "alternativas": [
+    "puxada-alta",
+    "remada-baixa"
+   ]
+  },
+  "remada-baixa": {
+   "nome": "Remada baixa no cabo",
+   "execucao": [
+    "Sentada, pés apoiados, joelhos levemente dobrados, coluna neutra.",
+    "Puxe até a barriga juntando as escápulas.",
+    "Volte esticando os braços sem arredondar as costas."
+   ],
+   "erros": [
+    "Balançar o tronco para frente e para trás."
+   ],
+   "alternativas": [
+    "remada-serrote",
+    "remada-curvada"
+   ]
+  },
+  "desenvolvimento-unilateral": {
+   "nome": "Desenvolvimento unilateral com halter, em pé",
+   "lados": true,
+   "execucao": [
+    "Em pé, halter na altura do ombro, abdômen e glúteo firmes.",
+    "Empurre para cima até o braço estender, sem inclinar o tronco para o lado.",
+    "Desça controlando até o ombro."
+   ],
+   "erros": [
+    "Arquear a lombar para empurrar.",
+    "Tronco tombando para o lado oposto."
+   ],
+   "alternativas": [
+    "desenvolvimento-maquina"
+   ]
+  },
+  "desenvolvimento-maquina": {
+   "nome": "Desenvolvimento na máquina",
+   "execucao": [
+    "Pegadores na altura dos ombros. Empurre para cima e desça devagar, costas no encosto."
+   ],
+   "erros": [
+    "Banco baixo demais, começando com os cotovelos abaixo da linha dos ombros."
+   ],
+   "alternativas": [
+    "desenvolvimento-unilateral"
+   ]
+  },
+  "remada-serrote": {
+   "nome": "Remada serrote",
+   "lados": true,
+   "execucao": [
+    "Mão e joelho de um lado no banco, a outra perna no chão, costas retas.",
+    "Puxe o halter em direção ao quadril, cotovelo rente ao corpo.",
+    "Desça até o braço estender, sentindo alongar as costas."
+   ],
+   "erros": [
+    "Girar o tronco para subir o halter."
+   ],
+   "alternativas": [
+    "remada-baixa"
+   ]
+  },
+  "face-pull": {
+   "nome": "Face pull no cabo",
+   "execucao": [
+    "Polia na altura da testa, com corda.",
+    "Puxe a corda em direção ao rosto abrindo as mãos, cotovelos altos.",
+    "No fim, as mãos ficam ao lado das orelhas. Segure 1 s."
+   ],
+   "erros": [
+    "Cotovelos baixos, virando uma remada."
+   ],
+   "alternativas": [
+    "crucifixo-inverso"
+   ]
+  },
+  "crucifixo-inverso": {
+   "nome": "Crucifixo inverso",
+   "execucao": [
+    "Na máquina ou inclinada à frente com halteres leves.",
+    "Abra os braços para os lados até a linha dos ombros, cotovelos levemente dobrados."
+   ],
+   "erros": [
+    "Usar carga demais e encolher os ombros."
+   ],
+   "alternativas": [
+    "face-pull"
+   ]
+  },
+  "rotacao-externa-cabo": {
+   "nome": "Rotação externa de ombro no cabo",
+   "lados": true,
+   "execucao": [
+    "Polia na altura do cotovelo, de lado para ela.",
+    "Cotovelo dobrado a 90° e colado ao corpo (uma toalha enrolada ajuda).",
+    "Gire o antebraço para fora, afastando da barriga, e volte devagar."
+   ],
+   "erros": [
+    "Afastar o cotovelo do corpo.",
+    "Carga pesada: este é leve mesmo."
+   ],
+   "alternativas": [
+    "rotacao-externa-elastico"
+   ]
+  },
+  "rotacao-externa-elastico": {
+   "nome": "Rotação externa com elástico",
+   "lados": true,
+   "execucao": [
+    "Mesmo movimento do cabo, com elástico preso na altura do cotovelo."
+   ],
+   "erros": [
+    "Afastar o cotovelo do corpo."
+   ],
+   "alternativas": [
+    "rotacao-externa-cabo"
+   ]
+  },
+  "dead-bug": {
+   "nome": "Dead bug",
+   "lados": true,
+   "execucao": [
+    "Deitada de barriga para cima, braços para o teto, quadril e joelhos a 90°.",
+    "Cole a lombar no chão e mantenha colada o tempo todo.",
+    "Estenda um braço para trás e a perna oposta para a frente, devagar.",
+    "Volte e troque de lado. Cada lado conta 1."
+   ],
+   "erros": [
+    "Lombar descolando do chão quando a perna desce."
+   ],
+   "alternativas": [
+    "prancha"
+   ],
+   "semCarga": true
+  },
+  "prancha": {
+   "nome": "Prancha frontal",
+   "execucao": [
+    "Antebraços no chão, corpo em linha reta, glúteo contraído. Segure 30 a 40 s por série."
+   ],
+   "erros": [
+    "Quadril alto demais ou caindo."
+   ],
+   "alternativas": [
+    "dead-bug"
+   ],
+   "semCarga": true
+  },
+  "levantamento-terra": {
+   "nome": "Levantamento terra",
+   "execucao": [
+    "Convencional ou trap bar. Pés na largura do quadril, barra sobre o meio do pé.",
+    "Segure a barra, desça o quadril até as canelas encostarem e estique as costas.",
+    "Encha o peito de ar, trave o abdômen e empurre o chão com as pernas.",
+    "No alto, fique ereta sem jogar o tronco para trás. Desça pelo mesmo caminho."
+   ],
+   "erros": [
+    "Arredondar as costas no começo da subida.",
+    "Barra se afastando das pernas."
+   ],
+   "alternativas": [
+    "hip-thrust"
+   ]
+  },
+  "hip-thrust": {
+   "nome": "Elevação de quadril com barra",
+   "execucao": [
+    "Costas apoiadas no banco na altura das escápulas, barra sobre o quadril.",
+    "Suba o quadril até o tronco ficar em linha com as coxas e contraia o glúteo 1 s.",
+    "Desça controlando."
+   ],
+   "erros": [
+    "Arquear a lombar no alto em vez de usar o glúteo."
+   ],
+   "alternativas": [
+    "levantamento-terra"
+   ]
+  },
+  "supino-inclinado-halteres": {
+   "nome": "Supino inclinado com halteres",
+   "execucao": [
+    "Banco a cerca de 30°, escápulas juntas e para baixo.",
+    "Desça os halteres até a parte de cima do peito, cotovelos a 45°.",
+    "Empurre para cima aproximando os halteres."
+   ],
+   "erros": [
+    "Banco inclinado demais, virando desenvolvimento."
+   ],
+   "alternativas": [
+    "supino-inclinado-maquina",
+    "flexao"
+   ]
+  },
+  "supino-inclinado-maquina": {
+   "nome": "Supino inclinado na máquina",
+   "execucao": [
+    "Pegadores na altura da parte de cima do peito. Empurre e volte devagar, escápulas no encosto."
+   ],
+   "erros": [
+    "Encolher os ombros ao empurrar."
+   ],
+   "alternativas": [
+    "supino-inclinado-halteres"
+   ]
+  },
+  "remada-curvada": {
+   "nome": "Remada curvada com barra",
+   "execucao": [
+    "Em pé, joelhos levemente dobrados, tronco inclinado a cerca de 45°, costas retas.",
+    "Puxe a barra até a barriga juntando as escápulas.",
+    "Desça até os braços estenderem, sem levantar o tronco."
+   ],
+   "erros": [
+    "Levantar o tronco a cada repetição para ajudar."
+   ],
+   "alternativas": [
+    "remada-baixa"
+   ]
+  },
+  "step-up": {
+   "nome": "Step-up em banco alto com halteres",
+   "lados": true,
+   "execucao": [
+    "Pé inteiro no banco, joelho na altura do quadril ou um pouco abaixo.",
+    "Suba empurrando com a perna de cima, sem dar impulso com a de baixo.",
+    "Desça devagar com a mesma perna. Faça todas de um lado e troque."
+   ],
+   "erros": [
+    "Impulsionar com a perna de baixo.",
+    "Joelho caindo para dentro."
+   ],
+   "alternativas": [
+    "afundo-reverso"
+   ]
+  },
+  "skater": {
+   "nome": "Salto lateral (skater)",
+   "lados": true,
+   "execucao": [
+    "Salte de lado de uma perna para a outra, como um patinador.",
+    "Aterrisse numa perna só, joelho dobrado, e segure 1 s antes do próximo salto.",
+    "Ida e volta contam 1 por lado."
+   ],
+   "erros": [
+    "Aterrissar com o joelho caindo para dentro.",
+    "Pressa: a aterrissagem estável é o objetivo."
+   ],
+   "alternativas": [],
+   "semCarga": true
+  },
+  "fazendeiro": {
+   "nome": "Carregamento do fazendeiro",
+   "execucao": [
+    "Um halter ou kettlebell pesado em cada mão.",
+    "Ande em passos curtos e firmes, ombros para baixo, tronco alto.",
+    "30 m por série; vire no meio se precisar."
+   ],
+   "erros": [
+    "Ombros encolhidos perto das orelhas.",
+    "Tronco balançando para os lados."
+   ],
+   "alternativas": [
+    "carregamento-mala"
+   ]
+  },
+  "carregamento-mala": {
+   "nome": "Carregamento de mala (um lado)",
+   "lados": true,
+   "execucao": [
+    "Um halter pesado em uma mão só.",
+    "Ande 30 m sem deixar o tronco tombar para o lado do peso. Troque de mão na volta."
+   ],
+   "erros": [
+    "Tronco inclinando para o lado do halter."
+   ],
+   "alternativas": [
+    "fazendeiro"
+   ]
+  },
+  "condicionamento": {
+   "nome": "Condicionamento: bike ou remo",
+   "execucao": [
+    "Bike assault ou remo. Cada bloco no ritmo da Z4 ({fc:Z4}).",
+    "Entre os blocos, 2 min bem leve.",
+    "Deve ficar difícil no fim de cada bloco, mas dá para manter o ritmo até o final."
+   ],
+   "erros": [
+    "Sair forte demais no primeiro bloco e não sustentar os outros."
+   ],
+   "alternativas": [],
+   "semCarga": true
+  }
+ },
+ "sessoes": {
+  "A": {
+   "nome": "Força A",
+   "titulo": "Inferiores + potência",
+   "tipo": "forca",
+   "forte": true,
+   "grupos": [
+    "pernas"
+   ],
+   "dur": "55 min",
+   "blocos": [
+    {
+     "ex": "salto-caixa",
+     "series": "4 × 3",
+     "nota": "Máxima altura, sem cansaço",
+     "descanso": "60 s"
+    },
+    {
+     "ex": "agachamento-barra",
+     "series": "4 × 5",
+     "nota": "RIR 2",
+     "descanso": "2–3 min"
+    },
+    {
+     "ex": "terra-romeno",
+     "series": "3 × 8",
+     "nota": "RIR 2",
+     "descanso": "2 min"
+    },
+    {
+     "biset": true,
+     "descanso": "90 s",
+     "ex": [
+      {
+       "ex": "bulgaro-halteres",
+       "series": "3 × 8/perna",
+       "nota": "RIR 1–2"
+      },
+      {
+       "ex": "panturrilha-unilateral",
+       "series": "3 × 12/perna",
+       "nota": "Descida em 3 s"
+      }
+     ]
+    },
+    {
+     "biset": true,
+     "descanso": "60 s",
+     "ex": [
+      {
+       "ex": "copenhague",
+       "series": "3 × 20 s/lado",
+       "nota": "Firme"
+      },
+      {
+       "ex": "pallof-cabo",
+       "series": "3 × 10/lado",
+       "nota": "Sem girar o tronco"
+      }
+     ]
+    }
+   ]
+  },
+  "B": {
+   "nome": "Força B",
+   "titulo": "Superiores + core",
+   "tipo": "forca",
+   "forte": false,
+   "grupos": [
+    "superiores"
+   ],
+   "dur": "55 min",
+   "blocos": [
+    {
+     "ex": "lenhador-cabo",
+     "series": "4 × 5/lado",
+     "nota": "Rápido na subida",
+     "descanso": "60 s"
+    },
+    {
+     "ex": "supino-halteres",
+     "series": "4 × 6–8",
+     "nota": "RIR 2",
+     "descanso": "2 min"
+    },
+    {
+     "ex": "puxada-alta",
+     "series": "4 × 6–8",
+     "nota": "RIR 1–2 · antes, 2 × 3 negativas na barra",
+     "descanso": "2 min"
+    },
+    {
+     "biset": true,
+     "descanso": "90 s",
+     "ex": [
+      {
+       "ex": "desenvolvimento-unilateral",
+       "series": "3 × 8–10/braço",
+       "nota": "RIR 2"
+      },
+      {
+       "ex": "remada-serrote",
+       "series": "3 × 10/braço",
+       "nota": "RIR 2"
+      }
+     ]
+    },
+    {
+     "biset": true,
+     "descanso": "60 s",
+     "ex": [
+      {
+       "ex": "face-pull",
+       "series": "3 × 15",
+       "nota": "Controlado"
+      },
+      {
+       "ex": "rotacao-externa-cabo",
+       "series": "3 × 12/braço",
+       "nota": "Leve"
+      }
+     ]
+    },
+    {
+     "ex": "dead-bug",
+     "series": "3 × 8/lado",
+     "nota": "Lombar colada no chão",
+     "descanso": "45 s"
+    }
+   ]
+  },
+  "C": {
+   "nome": "Força C",
+   "titulo": "Corpo todo + condicionamento",
+   "tipo": "forca",
+   "forte": false,
+   "grupos": [
+    "pernas",
+    "superiores"
+   ],
+   "dur": "60 min",
+   "blocos": [
+    {
+     "ex": "levantamento-terra",
+     "series": "4 × 4",
+     "nota": "RIR 2",
+     "descanso": "3 min"
+    },
+    {
+     "biset": true,
+     "descanso": "90 s",
+     "ex": [
+      {
+       "ex": "supino-inclinado-halteres",
+       "series": "3 × 8–10",
+       "nota": "RIR 2"
+      },
+      {
+       "ex": "remada-curvada",
+       "series": "3 × 8",
+       "nota": "RIR 2"
+      }
+     ]
+    },
+    {
+     "biset": true,
+     "descanso": "60 s",
+     "ex": [
+      {
+       "ex": "step-up",
+       "series": "3 × 8/perna",
+       "nota": "RIR 2"
+      },
+      {
+       "ex": "skater",
+       "series": "3 × 5/lado",
+       "nota": "Aterrissagem estável"
+      }
+     ]
+    },
+    {
+     "ex": "fazendeiro",
+     "series": "3 × 30 m",
+     "nota": "Pesado",
+     "descanso": "60 s"
+    },
+    {
+     "ex": "condicionamento",
+     "series": "{cond}",
+     "nota": "Z4 · 2 min leve entre os blocos",
+     "semana": "cond",
+     "fixo": true
+    }
+   ]
+  },
+  "int": {
+   "nome": "Corrida intervalada",
+   "tipo": "corrida",
+   "forte": true,
+   "grupos": [],
+   "dur": "45 min",
+   "blocos": [
+    {
+     "nome": "Aquecimento",
+     "dur": "12 min",
+     "alvo": "Z1–Z2 · FC até {fcmax:Z2}",
+     "explica": "Comece bem devagar e vá soltando aos poucos. O corpo precisa de uns 10 minutos para estar pronto para os tiros."
+    },
+    {
+     "nome": "Acelerações",
+     "dur": "4 × 20 s",
+     "alvo": "rápido e solto",
+     "explica": "Acelere até um ritmo rápido, mas sem sprintar. Ande ou trote 40 s entre elas. Servem para acordar as pernas antes do primeiro tiro."
+    },
+    {
+     "nome": "Tiro",
+     "rep": "{n} ×",
+     "dur": "{tiro}",
+     "alvo": "{ritmoTiro}",
+     "forte": true,
+     "explica": "Tiros e trotes se alternam: tiro, trote, tiro, trote, até o último tiro (sem trote depois dele). Mantenha o mesmo ritmo do primeiro ao último. A FC sobe aos poucos e chega à Z5 ({fc:Z5}) só no fim de cada tiro; isso é o esperado. Se o último sair bem mais lento que o primeiro, comece mais devagar na próxima semana."
+    },
+    {
+     "nome": "Trote",
+     "rep": "entre os tiros",
+     "dur": "{trote}",
+     "alvo": "bem leve · {ritmo:Z1}",
+     "explica": "Recuperação ativa: trote leve, ou caminhada se precisar. O próximo tiro começa quando o tempo acabar, não quando você se sentir totalmente recuperada."
+    },
+    {
+     "nome": "Desaquecimento",
+     "dur": "8 min",
+     "alvo": "Z1",
+     "explica": "Trote bem leve para a FC baixar aos poucos."
+    }
+   ],
+   "registro": {
+    "rotulo": "Ritmo dos tiros",
+    "placeholder": "ex.: 5:05, 5:02, 4:58, 5:00"
+   },
+   "notas": [
+    "Num trecho plano, como a Lagoa, para comparar de uma semana para outra."
+   ]
+  },
+  "teste5k": {
+   "nome": "Teste de 5 km",
+   "tipo": "corrida",
+   "forte": true,
+   "grupos": [],
+   "dur": "45 min",
+   "blocos": [
+    {
+     "nome": "Aquecimento",
+     "dur": "12 min",
+     "alvo": "Z1–Z2",
+     "explica": "Igual ao dos tiros: começa bem leve e vai soltando."
+    },
+    {
+     "nome": "Acelerações",
+     "dur": "4 × 20 s",
+     "alvo": "rápido e solto",
+     "explica": "Ande ou trote 40 s entre elas."
+    },
+    {
+     "nome": "5 km",
+     "dur": "contínuo",
+     "alvo": "o mais rápido que conseguir manter",
+     "forte": true,
+     "explica": "Comece um pouco abaixo do que acha que aguenta e acelere no último quilômetro. Use sempre o mesmo percurso plano, para o resultado ser comparável. O tempo final recalcula os ritmos das suas zonas."
+    },
+    {
+     "nome": "Desaquecimento",
+     "dur": "8 min",
+     "alvo": "Z1",
+     "explica": "Trote bem leve."
+    }
+   ],
+   "registro": {
+    "rotulo": "Tempo dos 5 km",
+    "placeholder": "ex.: 24:30",
+    "teste": true
+   }
+  },
+  "tenis": {
+   "nome": "Tênis ou padel",
+   "tipo": "livre",
+   "forte": false,
+   "forteSeLongo": true,
+   "grupos": [],
+   "dur": "60 min",
+   "blocos": [
+    {
+     "nome": "Jogo",
+     "dur": "cerca de 60 min",
+     "alvo": "livre",
+     "explica": "Conta como treino intenso intermitente: sprints curtos, frenagens e mudanças de direção. Se o jogo passar de 90 min, marque como jogo longo: ele passa a contar como treino forte, e o app sugere aliviar o dia seguinte."
+    }
+   ],
+   "registro": {
+    "rotulo": "Placar ou como foi",
+    "placeholder": "ex.: 6-4 3-6 7-5",
+    "longo": true
+   }
+  },
+  "z2": {
+   "nome": "Corrida leve em Z2",
+   "tipo": "corrida",
+   "forte": false,
+   "grupos": [],
+   "dur": "40 min",
+   "opcional": true,
+   "blocos": [
+    {
+     "nome": "Corrida contínua",
+     "dur": "30–35 min",
+     "alvo": "Z2 · FC até {fcmax:Z2}",
+     "explica": "Siga a FC, não o ritmo. Se passar de {fcmax:Z2}, diminua ou ande um pouco, principalmente nas subidas. Deve dar para conversar em frases completas."
+    },
+    {
+     "nome": "Mobilidade",
+     "dur": "5 min",
+     "alvo": "quadril, tornozelo e torácica",
+     "explica": "As mesmas do aquecimento de força: quadril 90/90, rotação torácica e world's greatest stretch."
+    }
+   ],
+   "registro": {
+    "rotulo": "Distância e FC média",
+    "placeholder": "ex.: 5,2 km, FC 148"
+   },
+   "notas": [
+    "Faça sexta ou domingo. O outro dia é folga."
+   ]
+  },
+  "z2curto": {
+   "nome": "Corrida leve em Z2",
+   "tipo": "corrida",
+   "forte": false,
+   "grupos": [],
+   "dur": "40–50 min",
+   "opcional": true,
+   "blocos": [
+    {
+     "nome": "Corrida contínua",
+     "dur": "40–50 min",
+     "alvo": "Z2 · FC até {fcmax:Z2}",
+     "explica": "Siga a FC, não o ritmo. Se passar de {fcmax:Z2}, diminua ou ande um pouco."
+    }
+   ],
+   "registro": {
+    "rotulo": "Distância e FC média",
+    "placeholder": "ex.: 7 km, FC 150"
+   }
+  },
+  "longao": {
+   "nome": "Longão em Z2",
+   "tipo": "corrida",
+   "forte": false,
+   "grupos": [],
+   "dur": "{longao}",
+   "opcional": true,
+   "blocos": [
+    {
+     "nome": "Longão",
+     "dur": "{longao}",
+     "alvo": "Z2 · FC até {fcmax:Z2}",
+     "explica": "Ritmo de conversa o tempo todo. Pode trocar por tênis, padel ou trilha. Se já fez o Z2 de sexta, hoje é folga."
+    }
+   ],
+   "registro": {
+    "rotulo": "Distância e FC média",
+    "placeholder": "ex.: 9 km, FC 150"
+   }
+  },
+  "descanso": {
+   "nome": "Descanso",
+   "tipo": "descanso",
+   "forte": false,
+   "grupos": [],
+   "blocos": [
+    {
+     "nome": "Dia sem treino",
+     "alvo": "caminhada ou alongamento liberados",
+     "explica": "Pelo menos um dia inteiro sem treino por semana. Caminhada leve e alongamento estão liberados, com FC em Z1."
+    }
+   ]
+  },
+  "livre": {
+   "nome": "Outro treino",
+   "tipo": "livre",
+   "forte": false,
+   "grupos": [],
+   "blocos": [],
+   "registro": {
+    "rotulo": "O que você fez",
+    "placeholder": "ex.: yoga 60 min, trilha"
+   }
+  }
+ },
+ "semanaPadrao": [
+  {
+   "sessao": "tenis",
+   "h": "07:00"
+  },
+  {
+   "sessao": "B",
+   "h": "07:15"
+  },
+  {
+   "sessao": "int",
+   "h": "07:15"
+  },
+  {
+   "sessao": "A",
+   "h": "07:15"
+  },
+  {
+   "sessao": "z2",
+   "h": "07:15"
+  },
+  {
+   "sessao": "C",
+   "h": "09:30"
+  },
+  {
+   "sessao": "longao",
+   "h": "11:00"
+  }
+ ],
+ "semanaVariante": {
+  "rotulo": "Tênis de segunda à noite",
+  "dias": [
+   {
+    "sessao": "tenis",
+    "h": "20:30"
+   },
+   {
+    "sessao": "descanso"
+   },
+   {
+    "sessao": "B",
+    "h": "07:15"
+   },
+   {
+    "sessao": "int",
+    "h": "07:15"
+   },
+   {
+    "sessao": "C",
+    "h": "07:15"
+   },
+   {
+    "sessao": "A",
+    "h": "09:30"
+   },
+   {
+    "sessao": "z2curto",
+    "h": "11:00"
+   }
+  ]
+ },
+ "semanas": [
+  {
+   "fase": "Retorno",
+   "forca": "3 séries em tudo, RIR 3, cerca de 80% das cargas de agosto",
+   "series": {
+    "max": 3
+   },
+   "tiros": {
+    "n": 4,
+    "tiro": "3 min",
+    "trote": "3 min"
+   },
+   "ritmoTiro": "retorno",
+   "longao": "40–50 min",
+   "cond": "3 × 3 min"
+  },
+  {
+   "fase": "Retorno",
+   "forca": "3 séries em tudo, RIR 3, cerca de 80% das cargas de agosto",
+   "series": {
+    "max": 3
+   },
+   "tiros": {
+    "n": 4,
+    "tiro": "3 min",
+    "trote": "3 min"
+   },
+   "ritmoTiro": "retorno",
+   "longao": "40–50 min",
+   "cond": "3 × 3 min"
+  },
+  {
+   "fase": "Base",
+   "forca": "Séries completas, RIR 2",
+   "tiros": {
+    "n": 5,
+    "tiro": "3 min",
+    "trote": "2:30"
+   },
+   "longao": "55 min",
+   "cond": "3 × 4 min"
+  },
+  {
+   "fase": "Descarga",
+   "forca": "Metade das séries, mesma carga",
+   "series": {
+    "metade": true
+   },
+   "descarga": true,
+   "teste": true,
+   "longao": "40 min"
+  },
+  {
+   "fase": "Construção",
+   "forca": "+2,5 a 5% de carga, RIR 1–2",
+   "tiros": {
+    "n": 4,
+    "tiro": "4 min",
+    "trote": "3 min"
+   },
+   "longao": "60 min",
+   "cond": "4 × 4 min"
+  },
+  {
+   "fase": "Construção",
+   "forca": "+2,5 a 5% de carga, RIR 1–2",
+   "tiros": {
+    "n": 4,
+    "tiro": "4 min",
+    "trote": "3 min"
+   },
+   "longao": "60 min",
+   "cond": "4 × 4 min"
+  },
+  {
+   "fase": "Construção",
+   "forca": "+2,5 a 5% de carga, RIR 1–2",
+   "tiros": {
+    "n": 5,
+    "tiro": "4 min",
+    "trote": "3 min"
+   },
+   "longao": "60 min",
+   "cond": "4 × 4 min"
+  },
+  {
+   "fase": "Descarga",
+   "forca": "Metade das séries",
+   "series": {
+    "metade": true
+   },
+   "descarga": true,
+   "tiros": {
+    "n": 3,
+    "tiro": "4 min",
+    "trote": "3 min"
+   },
+   "longao": "45 min",
+   "cond": "2 × 4 min"
+  },
+  {
+   "fase": "Intensificação",
+   "forca": "5 × 3 nos principais (agachamento, terra, supino), RIR 2",
+   "series": {
+    "principais": [
+     "agachamento-barra",
+     "levantamento-terra",
+     "supino-halteres"
+    ],
+    "prescricao": "5 × 3"
+   },
+   "tiros": {
+    "n": 6,
+    "tiro": "3 min",
+    "trote": "2 min"
+   },
+   "longao": "70 min, últimos 10 em Z3",
+   "cond": "4 × 4 min"
+  },
+  {
+   "fase": "Intensificação",
+   "forca": "5 × 3 nos principais (agachamento, terra, supino), RIR 2",
+   "series": {
+    "principais": [
+     "agachamento-barra",
+     "levantamento-terra",
+     "supino-halteres"
+    ],
+    "prescricao": "5 × 3"
+   },
+   "tiros": {
+    "n": 6,
+    "tiro": "3 min",
+    "trote": "2 min"
+   },
+   "longao": "70 min, últimos 10 em Z3",
+   "cond": "4 × 4 min"
+  },
+  {
+   "fase": "Intensificação",
+   "forca": "5 × 3 nos principais (agachamento, terra, supino), RIR 2",
+   "series": {
+    "principais": [
+     "agachamento-barra",
+     "levantamento-terra",
+     "supino-halteres"
+    ],
+    "prescricao": "5 × 3"
+   },
+   "tiros": {
+    "n": 6,
+    "tiro": "3 min",
+    "trote": "2 min"
+   },
+   "longao": "70 min, últimos 10 em Z3",
+   "cond": "4 × 4 min"
+  },
+  {
+   "fase": "Descarga",
+   "forca": "Metade das séries",
+   "series": {
+    "metade": true
+   },
+   "descarga": true,
+   "teste": true,
+   "longao": "40 min"
+  }
+ ],
+ "regras": [
+  "Pelo menos 1 dia inteiro sem treino por semana. Faça só um dos opcionais (sexta ou domingo).",
+  "Nunca dois treinos fortes seguidos: tiros, Força A e jogo de tênis longo.",
+  "Pelo menos 48 h entre treinos do mesmo grupo muscular.",
+  "Treino perdido não acumula. Os opcionais saem primeiro; força e tiros são a prioridade.",
+  "Subir carga: fez todas as repetições com o RIR indicado? Na semana seguinte, +2,5 kg nas pernas e +1 a 2 kg nos braços.",
+  "Aliviar: dor articular por mais de 48 h, sono ruim por vários dias ou FC de repouso 5 bpm acima do normal. Troque o intervalado por Z2 ou descanse.",
+  "RIR é quantas repetições ainda sobrariam no fim da série. RIR 2: dava para fazer mais 2."
+ ]
+}
