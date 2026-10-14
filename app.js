@@ -1,7 +1,7 @@
 /* Tiebreak · app de treinos. Tudo fica no aparelho (localStorage); backup manual em JSON. */
 'use strict';
 
-const APP_VERSAO = '1.2.0';
+const APP_VERSAO = '1.2.1';
 const KEY = 'tiebreak:v1';
 const DIAS = ['seg', 'ter', 'qua', 'qui', 'sex', 'sáb', 'dom'];
 const DIAS_LONGO = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
@@ -826,7 +826,7 @@ function renderAjustes() {
   const ub = S.ultimoBackup ? new Date(S.ultimoBackup) : null;
   parts.push(h('section', { class: 'card' }, h('h3', null, 'Backup'),
     h('p', { class: 'small muted' }, ub ? `Último backup em ${fmtBarra(ub)} às ${pad(ub.getHours())}:${pad(ub.getMinutes())}.` : 'Nenhum backup feito ainda.'),
-    h('p', { class: 'small muted' }, 'Os dados ficam só neste aparelho. O backup gera um arquivo para salvar em Arquivos → iCloud Drive → Treinos.'),
+    h('p', { class: 'small muted' }, 'Os dados ficam só neste aparelho. O backup gera um arquivo para guardar fora do celular, no iCloud Drive ou no Google Drive.'),
     h('div', { class: 'row wrap' }, h('button', { class: 'btn solid', type: 'button', onclick: fazerBackup }, 'Fazer backup'), h('button', { class: 'btn', type: 'button', onclick: () => $('#f-restaurar').click() }, 'Restaurar'))));
 
   // zonas

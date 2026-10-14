@@ -1,5 +1,5 @@
 /* Tiebreak · cache para funcionar offline. Ao publicar uma versão nova, mude VERSAO. */
-const VERSAO = 'tiebreak-1.2.0';
+const VERSAO = 'tiebreak-1.2.1';
 const FONTES = 'tiebreak-fontes';
 const ARQUIVOS = [
   './', 'index.html', 'styles.css', 'app.js', 'plano.json', 'manifest.webmanifest',
