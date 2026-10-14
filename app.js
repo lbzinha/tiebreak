@@ -1,7 +1,7 @@
 /* Tiebreak · app de treinos. Tudo fica no aparelho (localStorage); backup manual em JSON. */
 'use strict';
 
-const APP_VERSAO = '1.0.0';
+const APP_VERSAO = '1.2.0';
 const KEY = 'tiebreak:v1';
 const DIAS = ['seg', 'ter', 'qua', 'qui', 'sex', 'sáb', 'dom'];
 const DIAS_LONGO = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
@@ -103,7 +103,7 @@ function infoDia(d) {
   const i = diaSemana(d);
   let base = { sessao: 'livre' };
   if (w) {
-    const lista = pp().noites[k] && P.semanaVariante ? P.semanaVariante.dias : P.semanaPadrao;
+    const lista = w.dias || (pp().noites[k] && P.semanaVariante ? P.semanaVariante.dias : P.semanaPadrao);
     base = Object.assign({}, lista[i]);
     if (base.sessao === 'int' && w.teste) base.sessao = 'teste5k';
     if (base.sessao === 'int' && !w.tiros) base.sessao = 'z2';
@@ -127,7 +127,25 @@ function nomeSessao(id, completo) {
   if (id === 'livre') return 'Dia livre';
   return completo && s.titulo ? `${s.nome}: ${s.titulo}` : s.nome;
 }
-function nomeCurto(id) { return id === 'int' ? 'Tiros' : id === 'teste5k' ? 'Teste 5 km' : id === 'z2' || id === 'z2curto' ? 'Z2' : id === 'tenis' ? 'Tênis' : id === 'livre' ? 'Outro' : sess(id).nome; }
+function nomeCurto(id) { const s = sess(id); if (s.curto) return s.curto; return id === 'int' ? 'Tiros' : id === 'teste5k' ? 'Teste 5 km' : id === 'z2' || id === 'z2curto' ? 'Z2' : id === 'tenis' ? 'Tênis' : id === 'livre' ? 'Outro' : s.nome; }
+const semTeste = (id) => (id === 'teste5k' ? 'int' : id);
+/* Sessões que podem entrar no lugar de outra: força primeiro (as mais leves antes), depois o intervalado. */
+function substitutas(w) {
+  const ids = P.principais.filter((id) => P.sessoes[id] && sess(id).tipo !== 'livre')
+    .map((id) => (id === 'int' && w && w.teste && P.sessoes.teste5k ? 'teste5k' : id));
+  const peso = (id) => (sess(id).tipo === 'forca' ? 0 : 2) + (sess(id).forte ? 1 : 0);
+  return ids.map((id, i) => [id, i]).sort((a, b) => peso(a[0]) - peso(b[0]) || a[1] - b[1]).map((x) => x[0]);
+}
+/* Opções do menu "O que você fez" e do guia: todas as sessões do plano, sem nomes repetidos. */
+function opcoesSessoes(w, paraGuia) {
+  const vistos = new Set();
+  const ids = Object.keys(P.sessoes).filter((id) => !(paraGuia && (id === 'descanso' || id === 'livre')))
+    .filter((id) => !(w && w.teste ? id === 'int' && P.sessoes.teste5k : id === 'teste5k' && !paraGuia));
+  const ordem = (id) => (id === 'livre' ? 3 : id === 'descanso' ? 2 : sess(id).tipo === 'forca' ? 0 : 1);
+  return ids.map((id, i) => [id, i]).sort((a, b) => ordem(a[0]) - ordem(b[0]) || a[1] - b[1]).map((x) => x[0])
+    .filter((id) => { const n = sess(id).nome; if (vistos.has(n)) return false; vistos.add(n); return true; });
+}
+function aquecDe(id) { return (id && sess(id).aquecimento) || P.aquecimento; }
 function garantir(d, sessao) {
   const id = docId(d);
   if (!S.registros[id]) S.registros[id] = { data: iso(d), sessao, itens: {}, feito: false, detalhe: '', nota: '' };
@@ -265,7 +283,7 @@ function sugerir(d) {
   const gAnt = pAnt ? grupos(pAnt) : [];
   const ok = (c) => !(forte(c) && (fAnt || fProx)) && !grupos(c).some((g) => gAnt.includes(g));
   const candidatos = () => {
-    const base = ['B', 'C', 'A', inf.w.teste ? 'teste5k' : 'int'].filter((c) => P.sessoes[c] && c !== p && !feitosSemana.has(c === 'teste5k' ? 'int' : c) && ok(c));
+    const base = substitutas(inf.w).filter((c) => c !== p && !feitosSemana.has(semTeste(c)) && ok(c));
     base.sort((a, b) => Number(depois.includes(a)) - Number(depois.includes(b)));
     return base[0];
   };
@@ -292,7 +310,7 @@ function sugerir(d) {
   if (seguidos >= 6) return { d, de: p, para: 'descanso', motivo: '6 dias seguidos de treino' };
   // 5. opcional sai primeiro quando falta um principal
   if (sess(p).opcional) {
-    const faltando = ['B', 'C', 'A', inf.w.teste ? 'teste5k' : 'int'].filter((c) => P.sessoes[c] && !feitosSemana.has(c === 'teste5k' ? 'int' : c) && !depois.includes(c) && ok(c));
+    const faltando = substitutas(inf.w).filter((c) => !feitosSemana.has(semTeste(c)) && !depois.includes(c) && ok(c));
     if (faltando.length) return { d, de: p, para: faltando[0], motivo: `${nomeCurto(faltando[0])} ficou para trás nesta semana` };
   }
   return null;
@@ -324,7 +342,8 @@ function sugestaoRepetir() {
   const k = semanaCal(HOJE);
   if (k < 2 || !numPlano(k - 1) || !numPlano(k) || repetida(k) || pp().semanasIgnoradas[k]) return null;
   const feitos = principaisFeitos(k - 1);
-  if (feitos >= (P.minimoSemana || 3)) return null;
+  const minimo = P.minimoSemana ?? 3;
+  if (!minimo || feitos >= minimo) return null;
   return { k, n: numPlano(k - 1), feitos };
 }
 
@@ -426,12 +445,12 @@ function renderHoje() {
 
   // escolha do treino
   const sel = h('select', { class: 'text', id: 'sel-sessao' });
-  const opcoes = ['A', 'B', 'C', inf.w && inf.w.teste ? 'teste5k' : 'int', 'tenis', 'z2', 'longao', 'descanso', 'livre'];
+  const opcoes = opcoesSessoes(inf.w);
   if (!opcoes.includes(planejado)) opcoes.unshift(planejado);
   if (!opcoes.includes(tipo)) opcoes.unshift(tipo);
   for (const o of opcoes) {
     if (!P.sessoes[o]) continue;
-    const rot = o === 'livre' ? 'Outro treino' : nomeSessao(o, true);
+    const rot = o === 'livre' ? 'Outro treino' : nomeSessao(o);
     sel.append(h('option', { value: o, selected: o === tipo }, o === planejado && o !== 'livre' ? `${rot} (planejado)` : rot));
   }
   sel.addEventListener('change', () => {
@@ -481,8 +500,8 @@ function conteudoForca(d, tipo, inf) {
   const log = reg(d);
   const parts = [];
   if (w) parts.push(h('p', { class: 'week-note' }, h('b', null, `Semana ${inf.n}: `), w.forca));
-  parts.push(h('button', { class: 'tap-row', type: 'button', onclick: () => abrirFicha(() => fichaAquecimento()) },
-    h('span', { class: 'grow' }, h('b', null, 'Aquecimento'), h('span', { class: 'muted' }, ` · ${P.aquecimento.dur}`)), h('span', { class: 'chev' }, '›')));
+  parts.push(h('button', { class: 'tap-row', type: 'button', onclick: () => abrirFicha(() => fichaAquecimento(tipo)) },
+    h('span', { class: 'grow' }, h('b', null, 'Aquecimento'), aquecDe(tipo).dur ? h('span', { class: 'muted' }, ` · ${aquecDe(tipo).dur}`) : null), h('span', { class: 'chev' }, '›')));
 
   const slots = slotsForca(tipo, w);
   const nFeitos = slots.filter((x) => { const r = itemDoSlot(log, x.ex); return r.it && r.it.feito; }).length;
@@ -606,8 +625,9 @@ function conteudoOutro(d, tipo, inf) {
 }
 
 /* ---------- fichas ---------- */
-function fichaAquecimento() {
-  return [h('span', { class: 'eyebrow' }, 'Antes de cada treino de força'), h('h2', null, `Aquecimento · ${P.aquecimento.dur}`), h('ol', null, P.aquecimento.passos.map((p) => h('li', null, p)))];
+function fichaAquecimento(id) {
+  const a = aquecDe(id);
+  return [h('span', { class: 'eyebrow' }, id && sess(id).aquecimento ? nomeSessao(id) : 'Antes de cada treino de força'), h('h2', null, a.dur ? `Aquecimento · ${a.dur}` : 'Aquecimento'), h('ol', null, a.passos.map((p) => h('li', null, p)))];
 }
 function fichaExercicio(exId, ctx) {
   ctx = ctx || {};
@@ -675,7 +695,7 @@ function fichaSessao(tipo, w) {
   const out = [h('span', { class: 'eyebrow' }, 'Guia'), h('h2', null, nomeSessao(tipo, true))];
   if (s.tipo === 'forca') {
     if (w) out.push(h('p', { class: 'muted small' }, `Semana atual: ${w.forca}`));
-    out.push(h('button', { class: 'tap-row', type: 'button', onclick: () => abrirFicha(() => fichaAquecimento(), true) }, h('span', { class: 'grow' }, h('b', null, 'Aquecimento'), ` · ${P.aquecimento.dur}`), h('span', { class: 'chev' }, '›')));
+    out.push(h('button', { class: 'tap-row', type: 'button', onclick: () => abrirFicha(() => fichaAquecimento(tipo), true) }, h('span', { class: 'grow' }, h('b', null, 'Aquecimento'), aquecDe(tipo).dur ? ` · ${aquecDe(tipo).dur}` : ''), h('span', { class: 'chev' }, '›')));
     const slots = slotsForca(tipo, w);
     out.push(h('ul', { class: 'guide' }, slots.map((sl) => h('li', null, h('button', { type: 'button', onclick: () => abrirFicha(() => fichaExercicio(sl.ex, { slot: sl, tipo, w }), true) },
       h('span', { class: 'grow' }, P.exercicios[sl.ex].nome, h('small', null, [sl.series, sl.bloco.biset ? `bi-set com ${P.exercicios[sl.par.ex].nome}` : null].filter(Boolean).join(' · '))), h('span', { class: 'chev' }, '›'))))));
@@ -702,9 +722,9 @@ function fichaPlano() {
   return [h('span', { class: 'eyebrow' }, 'Guia'), h('h2', null, P.nome), P.objetivo ? h('p', { class: 'muted' }, P.objetivo) : null,
     h('ul', { class: 'plan12' }, P.semanas.map((w, i) => h('li', { class: i + 1 === nAtual ? 'cur' : null }, h('span', { class: 'wk' }, `S${i + 1}`),
       h('div', null, h('div', { class: 'row wrap' }, h('b', null, w.fase), w.descarga ? h('span', { class: 'pill ok' }, 'descarga') : null, w.teste ? h('span', { class: 'pill ball' }, 'teste 5 km') : null),
-        h('div', { class: 'l2' }, w.tiros ? `Tiros ${w.tiros.n} × ${w.tiros.tiro} · Longão ${w.longao}` : `Teste de 5 km · Longão ${w.longao}`))))),
+        h('div', { class: 'l2' }, [w.tiros ? `Tiros ${w.tiros.n} × ${w.tiros.tiro}` : null, w.teste ? 'Teste de 5 km' : null, w.longao ? `Longão ${w.longao}` : null].filter(Boolean).join(' · ') || w.forca))))),
     h('h3', null, 'Regras'), h('ul', { class: 'bul' }, (P.regras || []).map((r) => h('li', null, r))),
-    h('p', { class: 'small muted' }, 'A fase avança por semana cumprida. Se fizer menos de 3 dos 5 treinos principais, o app sugere repetir a semana.')];
+    (P.minimoSemana ?? 3) ? h('p', { class: 'small muted' }, `A fase avança por semana cumprida. Se fizer menos de ${P.minimoSemana ?? 3} dos ${P.principais.length} treinos principais, o app sugere repetir a semana.`) : null];
 }
 
 /* ---------- SEMANA ---------- */
@@ -738,7 +758,11 @@ function renderSemana() {
     const what = h('span', { class: 'what' });
     if (f && real !== pl) what.append(h('span', { class: 'p' }, nomeSessao(real)), h('br'), h('span', { class: 'p strike' }, plTxt));
     else if (!f && real !== pl) what.append(h('span', { class: 'p' }, nomeSessao(real)), h('br'), h('span', { class: 'h' }, `no lugar de ${plTxt}`));
-    else what.append(h('span', { class: 'p' }, plTxt), (inf.base.h || sess(pl).opcional) ? h('br') : null, h('span', { class: 'h' }, [inf.base.h, sess(pl).opcional ? 'opcional' : null].filter(Boolean).join(' · ')));
+    else {
+      const extra = [inf.base.h, sess(pl).opcional ? 'opcional' : null].filter(Boolean).join(' · ');
+      what.append(h('span', { class: 'p' }, plTxt));
+      if (extra) what.append(h('br'), h('span', { class: 'h' }, extra));
+    }
     const hj = d.getTime() === HOJE.getTime();
     return h('li', null, h('button', { class: 'dayrow' + (hj ? ' today' : ''), type: 'button', onclick: () => abrirDia(d) },
       h('span', { class: 'dd' }, h('b', null, d.getDate()), h('small', null, DIAS[i])), what,
@@ -756,10 +780,9 @@ function renderSemana() {
   const item = (rot, sub2, fn) => h('li', null, h('button', { type: 'button', onclick: () => abrirFicha(fn) }, h('span', { class: 'grow' }, rot, sub2 ? h('small', null, sub2) : null), h('span', { class: 'chev muted' }, '›')));
   parts.push(h('h3', { style: 'margin-top:6px' }, 'Guia'));
   parts.push(h('ul', { class: 'guide' },
-    item('As 12 semanas e as regras', 'fases, descargas e testes', () => fichaPlano()),
-    item('Aquecimento', P.aquecimento.dur, () => fichaAquecimento()),
-    ...['A', 'B', 'C'].filter((x) => P.sessoes[x]).map((x) => item(nomeSessao(x), sess(x).titulo, () => fichaSessao(x, wG))),
-    ...['int', 'teste5k', 'z2', 'longao', 'tenis'].filter((x) => P.sessoes[x]).map((x) => item(nomeSessao(x), null, () => fichaSessao(x, x === 'teste5k' ? null : wG))),
+    item(`As ${P.semanas.length} semanas e as regras`, 'fases e regras do plano', () => fichaPlano()),
+    P.aquecimento && P.aquecimento.passos && P.aquecimento.passos.length ? item('Aquecimento', P.aquecimento.dur, () => fichaAquecimento()) : null,
+    ...opcoesSessoes(null, true).map((x) => item(nomeSessao(x), sess(x).titulo || null, () => fichaSessao(x, x === 'teste5k' ? null : wG))),
     item('Suas zonas', 'frequência cardíaca e ritmo', () => fichaZonas())));
   v.replaceChildren(...parts);
 }
@@ -924,11 +947,17 @@ function validarPlano(p) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(p.inicio || '')) return 'O plano não tem data de início.';
   if (!Array.isArray(p.semanas) || !p.semanas.length) return 'O plano não tem semanas.';
   if (!Array.isArray(p.semanaPadrao) || p.semanaPadrao.length !== 7) return 'A semana padrão precisa ter 7 dias.';
+  for (const [i, w] of p.semanas.entries()) {
+    if (!w.dias) continue;
+    if (!Array.isArray(w.dias) || w.dias.length !== 7) return `A semana ${i + 1} precisa ter 7 dias.`;
+    for (const d of w.dias) if (!p.sessoes[d.sessao] && !['descanso', 'livre'].includes(d.sessao)) return `Sessão desconhecida na semana ${i + 1}: ${d.sessao}`;
+  }
+  for (const d of p.semanaPadrao) if (!p.sessoes[d.sessao] && !['descanso', 'livre'].includes(d.sessao)) return `Sessão desconhecida: ${d.sessao}`;
   if (!p.sessoes || !p.exercicios) return 'Faltam sessões ou exercícios.';
   for (const s of Object.values(p.sessoes)) for (const b of s.blocos || []) for (const x of (b.biset ? b.ex : b.ex ? [b] : [])) if (!p.exercicios[x.ex]) return `Exercício sem ficha: ${x.ex}`;
   if (!p.sessoes.livre) p.sessoes.livre = { nome: 'Outro treino', tipo: 'livre', blocos: [], registro: { rotulo: 'O que você fez', placeholder: '' } };
   if (!p.sessoes.descanso) p.sessoes.descanso = { nome: 'Descanso', tipo: 'descanso', blocos: [] };
-  p.principais ||= ['A', 'B', 'C', 'int'];
+  p.principais ||= Object.keys(p.sessoes).filter((id) => p.sessoes[id].tipo === 'forca' || id === 'int');
   p.aquecimento ||= { dur: '', passos: [] };
   return null;
 }
