@@ -1,7 +1,7 @@
 /* Tiebreak · app de treinos. Tudo fica no aparelho (localStorage); backup manual em JSON. */
 'use strict';
 
-const APP_VERSAO = '1.2.1';
+const APP_VERSAO = '1.3.0';
 const KEY = 'tiebreak:v1';
 const DIAS = ['seg', 'ter', 'qua', 'qui', 'sex', 'sáb', 'dom'];
 const DIAS_LONGO = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
@@ -96,15 +96,41 @@ function numPlano(k) { // semana do plano (1..N) para a semana de calendário k,
 function ultimaSemanaCal() { return P.semanas.length + pp().repeticoes.length; }
 function repetida(k) { return pp().repeticoes.includes(k); }
 
+/* Teste de 5 km não feito passa para a semana seguinte (uma vez). */
+function testeFeitoNaSemana(k) {
+  const ini = inicioSemanaCal(k);
+  for (let i = 0; i < 7; i++) { const l = reg(addDays(ini, i)); if (l && l.sessao === 'teste5k' && feito(l)) return true; }
+  const a = iso(ini); const b = iso(addDays(ini, 6));
+  return (S.testes5k || []).some((t) => t.data >= a && t.data <= b);
+}
+function semanaDoPlano(k) {
+  const n = numPlano(k);
+  if (!n) return null;
+  const w = P.semanas[n - 1];
+  if (w.teste || k < 2) return w;
+  const nAnt = numPlano(k - 1);
+  if (nAnt && P.semanas[nAnt - 1].teste && !testeFeitoNaSemana(k - 1) && semanaCal(HOJE) >= k) return Object.assign({}, w, { teste: true, testeAdiado: true });
+  return w;
+}
+/* Último dia em que a sessão foi feita antes de d ('' se nunca). */
+function ultimaVez(id, antes) {
+  let u = '';
+  for (const l of Object.values(S.registros)) if (l && l.sessao === id && l.data < antes && l.data > u && feito(l)) u = l.data;
+  return u;
+}
 function infoDia(d) {
   const k = semanaCal(d);
   const n = numPlano(k);
-  const w = n ? P.semanas[n - 1] : null;
+  const w = semanaDoPlano(k);
   const i = diaSemana(d);
   let base = { sessao: 'livre' };
   if (w) {
     const lista = w.dias || (pp().noites[k] && P.semanaVariante ? P.semanaVariante.dias : P.semanaPadrao);
     base = Object.assign({}, lista[i]);
+    if (Array.isArray(base.alternar) && base.alternar.length) {
+      const antes = iso(d);
+      base.sessao = base.alternar.filter((x) => P.sessoes[x]).map((x, j) => [x, ultimaVez(x, antes), j]).sort((a, b) => (a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : a[2] - b[2]))[0][0];
+    }
     if (base.sessao === 'int' && w.teste) base.sessao = 'teste5k';
     if (base.sessao === 'int' && !w.tiros) base.sessao = 'z2';
   }
@@ -117,11 +143,11 @@ function feito(log) {
   if (sess(log.sessao).tipo === 'forca') return Object.values(log.itens || {}).some((x) => x.feito);
   return !!log.feito;
 }
-function sugerido(d) { const inf = infoDia(d); return pp().trocas[iso(d)] || inf.base.sessao; }
+function sugerido(d) { const inf = infoDia(d); const t = pp().trocas[iso(d)]; return t && P.sessoes[t] && !P.sessoes[t].arquivada ? t : inf.base.sessao; }
 function efetiva(d) { const l = reg(d); return (l && l.sessao) || sugerido(d); }
 function forte(id, log) { const s = sess(id); return !!(s.forte || (s.forteSeLongo && log && log.longo)); }
 function grupos(id) { return sess(id).grupos || []; }
-function principal(id) { return P.principais.includes(id === 'teste5k' ? 'int' : id); }
+function principal(id) { const s = P.sessoes[id]; return P.principais.includes(id === 'teste5k' ? 'int' : id) || !!(s && s.arquivada && s.tipo === 'forca'); }
 function nomeSessao(id, completo) {
   const s = sess(id);
   if (id === 'livre') return 'Dia livre';
@@ -139,7 +165,7 @@ function substitutas(w) {
 /* Opções do menu "O que você fez" e do guia: todas as sessões do plano, sem nomes repetidos. */
 function opcoesSessoes(w, paraGuia) {
   const vistos = new Set();
-  const ids = Object.keys(P.sessoes).filter((id) => !(paraGuia && (id === 'descanso' || id === 'livre')))
+  const ids = Object.keys(P.sessoes).filter((id) => !P.sessoes[id].arquivada).filter((id) => !(paraGuia && (id === 'descanso' || id === 'livre')))
     .filter((id) => !(w && w.teste ? id === 'int' && P.sessoes.teste5k : id === 'teste5k' && !paraGuia));
   const ordem = (id) => (id === 'livre' ? 3 : id === 'descanso' ? 2 : sess(id).tipo === 'forca' ? 0 : 1);
   return ids.map((id, i) => [id, i]).sort((a, b) => ordem(a[0]) - ordem(b[0]) || a[1] - b[1]).map((x) => x[0])
@@ -281,7 +307,8 @@ function sugerir(d) {
   const prox = previsto(addDays(d, 1));
   const fProx = prox && forte(prox, reg(addDays(d, 1)));
   const gAnt = pAnt ? grupos(pAnt) : [];
-  const ok = (c) => !(forte(c) && (fAnt || fProx)) && !grupos(c).some((g) => gAnt.includes(g));
+  const veda = (c, depois) => !!(depois && (sess(c).evitarVespera || []).includes(depois));
+  const ok = (c) => !(forte(c) && (fAnt || fProx)) && !grupos(c).some((g) => gAnt.includes(g)) && !veda(c, prox);
   const candidatos = () => {
     const base = substitutas(inf.w).filter((c) => c !== p && !feitosSemana.has(semTeste(c)) && ok(c));
     base.sort((a, b) => Number(depois.includes(a)) - Number(depois.includes(b)));
@@ -302,6 +329,9 @@ function sugerir(d) {
   }
   // 2. dois fortes seguidos
   if (forte(p) && fAnt) return { d, de: p, para: alternativa(), motivo: `dois fortes seguidos (${nomeCurto(pAnt)} na ${dAnt})` };
+  // 2b. perna na véspera de tiros ou tênis
+  if (veda(p, prox)) return { d, de: p, para: candidatos() || 'descanso', motivo: `${nomeCurto(p)} na véspera de ${nomeCurto(prox)}` };
+  if (pAnt && feitoEm(ant) && veda(pAnt, p) && (p === 'int' || p === 'teste5k') && P.sessoes.z2) return { d, de: p, para: 'z2', motivo: `${nomeCurto(pAnt)} ontem` };
   // 3. mesmo grupo muscular em menos de 48 h
   if (grupos(p).some((g) => gAnt.includes(g))) return { d, de: p, para: alternativa(), motivo: 'mesmo grupo muscular em menos de 48 h' };
   // 4. pelo menos 1 descanso por semana
@@ -341,6 +371,7 @@ function principaisFeitos(k) {
 function sugestaoRepetir() {
   const k = semanaCal(HOJE);
   if (k < 2 || !numPlano(k - 1) || !numPlano(k) || repetida(k) || pp().semanasIgnoradas[k]) return null;
+  if (P.semanas[numPlano(k - 1) - 1].descarga) return null;
   const feitos = principaisFeitos(k - 1);
   const minimo = P.minimoSemana ?? 3;
   if (!minimo || feitos >= minimo) return null;
@@ -738,7 +769,8 @@ function renderSemana() {
   const titulo = n ? `Semana ${n} de ${P.semanas.length}` : k < 1 ? 'Antes do plano' : 'Depois do plano';
   const sub = h('div', { class: 'sub' }, h('span', { class: 'num' }, `${fmtCurto(ini)} – ${fmtCurto(addDays(ini, 6))}`));
   if (w) sub.append(h('span', { class: 'pill' }, w.fase));
-  if (w && w.teste) sub.append(h('span', { class: 'pill ball' }, 'teste 5 km'));
+  const wT = semanaDoPlano(k);
+  if (wT && wT.teste) sub.append(h('span', { class: 'pill ball' }, wT.testeAdiado ? 'teste 5 km (adiado)' : 'teste 5 km'));
   if (repetida(k)) sub.append(h('span', { class: 'pill dim' }, 'repetida'));
   const parts = [h('header', { class: 'week-head' },
     h('button', { class: 'icon-btn', type: 'button', 'aria-label': 'Semana anterior', disabled: k <= 0, onclick: () => { semanaVista--; renderSemana(); } }, '‹'),
@@ -773,7 +805,7 @@ function renderSemana() {
     const inp = h('input', { type: 'checkbox', id: 'noite' });
     inp.checked = !!pp().noites[k];
     inp.addEventListener('change', () => { pp().noites[k] = inp.checked; salvar(); renderSemana(); });
-    parts.push(h('label', { class: 'toggle card', for: 'noite' }, h('span', null, P.semanaVariante.rotulo, h('br'), h('span', { class: 'muted small' }, 'Terça vira descanso e a semana empurra um dia.')), h('span', { class: 'switch' }, inp, h('span', { class: 'track' }))));
+    parts.push(h('label', { class: 'toggle card', for: 'noite' }, h('span', null, P.semanaVariante.rotulo, h('br'), h('span', { class: 'muted small' }, P.semanaVariante.descricao || 'Terça vira descanso e a semana empurra um dia.')), h('span', { class: 'switch' }, inp, h('span', { class: 'track' }))));
   }
 
   const wG = w || P.semanas[(numPlano(semanaCal(HOJE)) || 1) - 1];

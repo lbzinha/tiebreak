@@ -1,14 +1,14 @@
 {
  "formato": "tiebreak-plano/1",
  "id": "12s-2026-10",
- "nome": "12 semanas: resistência e força",
- "objetivo": "VO2max e resistência, com força para massa magra e o tênis.",
+ "nome": "12 semanas: hipertrofia, corrida e tênis",
+ "objetivo": "Ganhar massa muscular e perder gordura, mantendo a corrida e o tênis.",
  "inicio": "2026-10-12",
  "principais": [
-  "tenis",
-  "A",
-  "B",
-  "C",
+  "sup1",
+  "sup2",
+  "inf1",
+  "inf2",
   "int"
  ],
  "minimoSemana": 3,
@@ -88,7 +88,9 @@
    ],
    "alternativas": [
     "agachamento-goblet",
-    "leg-press"
+    "leg-press",
+    "agachamento-smith",
+    "hack"
    ]
   },
   "agachamento-goblet": {
@@ -118,7 +120,9 @@
    ],
    "alternativas": [
     "agachamento-barra",
-    "agachamento-goblet"
+    "agachamento-goblet",
+    "hack",
+    "agachamento-smith"
    ]
   },
   "terra-romeno": {
@@ -168,7 +172,7 @@
    ]
   },
   "afundo-reverso": {
-   "nome": "Afundo reverso com halteres",
+   "nome": "Retrocesso com halteres",
    "lados": true,
    "execucao": [
     "De pé, dê um passo longo para trás e desça até o joelho de trás quase tocar o chão.",
@@ -178,7 +182,8 @@
     "Passo curto, jogando o joelho da frente muito à frente do pé."
    ],
    "alternativas": [
-    "bulgaro-halteres"
+    "bulgaro-halteres",
+    "afundo-smith"
    ]
   },
   "panturrilha-unilateral": {
@@ -236,7 +241,8 @@
     "Deixar o peso bater no fim da volta."
    ],
    "alternativas": [
-    "copenhague"
+    "copenhague",
+    "adutora-cabo"
    ]
   },
   "pallof-cabo": {
@@ -253,7 +259,8 @@
     "Ficar perto demais da polia, sem tensão."
    ],
    "alternativas": [
-    "pallof-elastico"
+    "pallof-elastico",
+    "prancha-lateral"
    ]
   },
   "pallof-elastico": {
@@ -359,7 +366,9 @@
    ],
    "alternativas": [
     "puxada-neutra",
-    "remada-baixa"
+    "remada-baixa",
+    "pulldown-maquina",
+    "barra-fixa-assistida"
    ]
   },
   "puxada-neutra": {
@@ -445,7 +454,8 @@
     "Cotovelos baixos, virando uma remada."
    ],
    "alternativas": [
-    "crucifixo-inverso"
+    "crucifixo-inverso",
+    "crucifixo-inverso-maquina"
    ]
   },
   "crucifixo-inverso": {
@@ -474,7 +484,8 @@
     "Carga pesada: este é leve mesmo."
    ],
    "alternativas": [
-    "rotacao-externa-elastico"
+    "rotacao-externa-elastico",
+    "rotacao-externa-halter"
    ]
   },
   "rotacao-externa-elastico": {
@@ -503,7 +514,8 @@
     "Lombar descolando do chão quando a perna desce."
    ],
    "alternativas": [
-    "prancha"
+    "prancha",
+    "bird-dog"
    ],
    "semCarga": true
   },
@@ -547,7 +559,8 @@
     "Arquear a lombar no alto em vez de usar o glúteo."
    ],
    "alternativas": [
-    "levantamento-terra"
+    "levantamento-terra",
+    "elevacao-pelvica-maquina"
    ]
   },
   "supino-inclinado-halteres": {
@@ -574,7 +587,8 @@
     "Encolher os ombros ao empurrar."
    ],
    "alternativas": [
-    "supino-inclinado-halteres"
+    "supino-inclinado-halteres",
+    "supino-maquina"
    ]
   },
   "remada-curvada": {
@@ -663,9 +677,834 @@
    ],
    "alternativas": [],
    "semCarga": true
+  },
+  "barra-fixa-assistida": {
+   "nome": "Gravitron, pegada aberta",
+   "execucao": [
+    "No Gravitron, joelhos no apoio. Quanto mais peso de ajuda, mais fácil.",
+    "Pegada aberta, um pouco além dos ombros, palmas para a frente.",
+    "Puxe até o queixo passar da barra, levando os cotovelos para baixo.",
+    "Desça controlando até os braços quase estenderem."
+   ],
+   "erros": [
+    "Balançar o corpo.",
+    "Descer rápido, sem controlar a volta."
+   ],
+   "alternativas": [
+    "puxada-alta",
+    "puxada-neutra"
+   ]
+  },
+  "remada-maquina": {
+   "nome": "Remada na máquina",
+   "execucao": [
+    "Peito no apoio, pegadores à frente.",
+    "Puxe levando os cotovelos para trás e volte devagar."
+   ],
+   "erros": [
+    "Encolher os ombros."
+   ],
+   "alternativas": [
+    "remada-apoiada",
+    "remada-baixa",
+    "remada-curvada-halteres"
+   ]
+  },
+  "desenvolvimento-halteres": {
+   "nome": "Desenvolvimento com halteres, pegada fechada",
+   "execucao": [
+    "Sentada com encosto, halteres na altura dos ombros, palmas viradas uma para a outra e cotovelos à frente.",
+    "Empurre para cima até os braços estenderem, sem arquear a lombar.",
+    "Desça controlando até a altura do queixo."
+   ],
+   "erros": [
+    "Arquear a lombar para empurrar."
+   ],
+   "alternativas": [
+    "desenvolvimento-maquina",
+    "desenvolvimento-unilateral"
+   ]
+  },
+  "triceps-barra": {
+   "nome": "Tríceps na polia com barra",
+   "execucao": [
+    "Polia alta com barra reta ou V, cotovelos colados ao corpo.",
+    "Estenda os braços para baixo e volte controlando."
+   ],
+   "erros": [
+    "Inclinar o tronco sobre a barra."
+   ],
+   "alternativas": [
+    "triceps-corda",
+    "triceps-banco",
+    "triceps-frances"
+   ]
+  },
+  "triceps-corda": {
+   "nome": "Tríceps na corda",
+   "execucao": [
+    "Polia alta com corda, cotovelos colados ao corpo.",
+    "Estenda os braços para baixo abrindo a corda no final.",
+    "Volte até os antebraços passarem um pouco da horizontal."
+   ],
+   "erros": [
+    "Cotovelos indo para a frente a cada repetição."
+   ],
+   "alternativas": [
+    "triceps-barra",
+    "triceps-banco"
+   ]
+  },
+  "triceps-frances": {
+   "nome": "Tríceps francês com halter",
+   "execucao": [
+    "Sentada, um halter seguro com as duas mãos acima da cabeça.",
+    "Desça o halter atrás da cabeça dobrando os cotovelos e estenda de volta."
+   ],
+   "erros": [
+    "Cotovelos abrindo muito."
+   ],
+   "alternativas": [
+    "triceps-corda"
+   ]
+  },
+  "bird-dog": {
+   "nome": "Bird dog",
+   "lados": true,
+   "semCarga": true,
+   "execucao": [
+    "Em quatro apoios, mãos embaixo dos ombros e joelhos embaixo do quadril.",
+    "Estenda um braço à frente e a perna oposta para trás, até ficarem na linha do corpo.",
+    "Segure 2 s sem girar o quadril, volte e troque de lado. Cada lado conta 1."
+   ],
+   "erros": [
+    "Arquear a lombar ao levantar a perna.",
+    "Girar o quadril para o lado."
+   ],
+   "alternativas": [
+    "dead-bug"
+   ]
+  },
+  "hack": {
+   "nome": "Agachamento no hack",
+   "execucao": [
+    "Costas apoiadas, pés na largura do quadril no meio da plataforma.",
+    "Desça controlando e suba empurrando com o pé inteiro."
+   ],
+   "erros": [
+    "Calcanhar saindo da plataforma."
+   ],
+   "alternativas": [
+    "leg-press",
+    "agachamento-smith",
+    "agachamento-goblet"
+   ]
+  },
+  "agachamento-smith": {
+   "nome": "Agachamento no Smith",
+   "execucao": [
+    "Barra apoiada no alto das costas, pés um pouco à frente da linha da barra.",
+    "Trave o abdômen e desça até a coxa ficar paralela ao chão ou onde não houver dor no joelho.",
+    "Suba empurrando o chão com o pé inteiro."
+   ],
+   "erros": [
+    "Joelhos fechando para dentro na subida.",
+    "Descer além do que o joelho tolera sem dor."
+   ],
+   "alternativas": [
+    "leg-press",
+    "agachamento-goblet"
+   ]
+  },
+  "cadeira-extensora": {
+   "nome": "Cadeira extensora",
+   "execucao": [
+    "Ajuste o encosto para o joelho ficar alinhado com o eixo da máquina.",
+    "Estenda as pernas, segure 1 s e desça devagar."
+   ],
+   "erros": [
+    "Descer deixando o peso cair."
+   ],
+   "alternativas": [
+    "leg-press",
+    "afundo-smith"
+   ]
+  },
+  "mesa-flexora": {
+   "nome": "Mesa flexora",
+   "execucao": [
+    "Deitada de barriga para baixo, rolo logo acima do calcanhar, joelhos fora da borda do banco.",
+    "Dobre os joelhos trazendo o rolo em direção ao glúteo, sem tirar o quadril do banco.",
+    "Desça devagar até quase estender."
+   ],
+   "erros": [
+    "Quadril subindo do banco.",
+    "Deixar o peso cair na volta."
+   ],
+   "alternativas": [
+    "cadeira-flexora",
+    "terra-romeno",
+    "stiff-halteres"
+   ]
+  },
+  "cadeira-flexora": {
+   "nome": "Cadeira flexora",
+   "execucao": [
+    "Sentada, rolo atrás do tornozelo e trava sobre as coxas.",
+    "Dobre os joelhos puxando o rolo para baixo e volte devagar."
+   ],
+   "erros": [
+    "Deixar o peso cair na volta."
+   ],
+   "alternativas": [
+    "mesa-flexora",
+    "terra-romeno"
+   ]
+  },
+  "panturrilha-sentada": {
+   "nome": "Panturrilha sentada",
+   "execucao": [
+    "Sentada na máquina, joelhos dobrados a 90° sob o apoio, ponta dos pés no degrau.",
+    "Suba o máximo e segure 1 s.",
+    "Desça devagar até alongar bem."
+   ],
+   "erros": [
+    "Amplitude curta."
+   ],
+   "alternativas": [
+    "panturrilha-maquina",
+    "panturrilha-unilateral"
+   ]
+  },
+  "elevacao-lateral": {
+   "nome": "Elevação lateral",
+   "execucao": [
+    "Em pé, halteres ao lado do corpo, cotovelos levemente dobrados.",
+    "Suba os braços para os lados até a altura dos ombros.",
+    "Desça devagar, em 2 a 3 s."
+   ],
+   "erros": [
+    "Subir acima da linha dos ombros encolhendo o trapézio.",
+    "Dar impulso com o tronco."
+   ],
+   "alternativas": [
+    "elevacao-lateral-cabo",
+    "elevacao-lateral-maquina"
+   ]
+  },
+  "elevacao-lateral-maquina": {
+   "nome": "Elevação lateral na máquina",
+   "execucao": [
+    "Braços nos apoios, cotovelos alinhados com o eixo.",
+    "Suba até a altura dos ombros e desça devagar."
+   ],
+   "erros": [
+    "Encolher os ombros."
+   ],
+   "alternativas": [
+    "elevacao-lateral",
+    "elevacao-lateral-cabo"
+   ]
+  },
+  "elevacao-lateral-cabo": {
+   "nome": "Elevação lateral no cabo",
+   "lados": true,
+   "execucao": [
+    "Polia embaixo, de lado para ela, puxando com a mão do lado oposto.",
+    "Suba o braço para o lado até a altura do ombro e desça devagar."
+   ],
+   "erros": [
+    "Inclinar o tronco para longe da polia."
+   ],
+   "alternativas": [
+    "elevacao-lateral",
+    "elevacao-lateral-maquina"
+   ]
+  },
+  "rosca-scott": {
+   "nome": "Rosca Scott",
+   "execucao": [
+    "Braços apoiados no banco Scott, barra W ou halter.",
+    "Suba sem tirar os braços do apoio e desça até quase estender."
+   ],
+   "erros": [
+    "Descer rápido e soltar o cotovelo."
+   ],
+   "alternativas": []
+  },
+  "rosca-martelo": {
+   "nome": "Rosca martelo",
+   "execucao": [
+    "Halteres com as palmas viradas para o corpo.",
+    "Suba sem mexer os cotovelos e desça devagar."
+   ],
+   "erros": [
+    "Balançar o tronco."
+   ],
+   "alternativas": [
+    "rosca-scott"
+   ]
+  },
+  "afundo-smith": {
+   "nome": "Afundo no Smith",
+   "lados": true,
+   "execucao": [
+    "Barra nas costas, um pé à frente e outro atrás.",
+    "Desça reto até o joelho de trás quase tocar o chão e suba."
+   ],
+   "erros": [
+    "Pés alinhados demais, perdendo o equilíbrio."
+   ],
+   "alternativas": [
+    "afundo-reverso",
+    "bulgaro-halteres"
+   ]
+  },
+  "prancha-lateral": {
+   "nome": "Prancha lateral",
+   "lados": true,
+   "semCarga": true,
+   "execucao": [
+    "Deitada de lado, apoiado no antebraço, cotovelo embaixo do ombro.",
+    "Suba o quadril até o corpo ficar em linha reta e segure o tempo indicado.",
+    "Troque de lado."
+   ],
+   "erros": [
+    "Quadril caindo ou indo para trás."
+   ],
+   "alternativas": [
+    "prancha",
+    "pallof-cabo"
+   ]
+  },
+  "abdominal-infra": {
+   "nome": "Elevação de pernas",
+   "semCarga": true,
+   "execucao": [
+    "Deitada ou na barra, pernas estendidas ou dobradas.",
+    "Suba as pernas enrolando o quadril e desça devagar sem arquear a lombar."
+   ],
+   "erros": [
+    "Usar o embalo."
+   ],
+   "alternativas": [
+    "abdominal-maquina"
+   ]
+  },
+  "abdominal-maquina": {
+   "nome": "Abdominal na máquina",
+   "execucao": [
+    "Ajuste o banco para o eixo ficar na altura da cintura.",
+    "Enrole o tronco para a frente, aproximando as costelas do quadril.",
+    "Volte devagar sem deixar o peso encostar."
+   ],
+   "erros": [
+    "Puxar com os braços em vez de usar o abdômen."
+   ],
+   "alternativas": [
+    "prancha",
+    "abdominal-infra"
+   ]
+  },
+  "crucifixo-maquina": {
+   "nome": "Crucifixo na máquina (voador)",
+   "execucao": [
+    "Pegadores na altura do peito, cotovelos levemente dobrados.",
+    "Feche os braços à frente e volte devagar até sentir alongar o peito."
+   ],
+   "erros": [
+    "Deixar os ombros irem para a frente."
+   ],
+   "alternativas": [
+    "supino-maquina",
+    "supino-halteres"
+   ]
+  },
+  "remada-apoiada": {
+   "nome": "Remada com peito apoiado",
+   "execucao": [
+    "Peito apoiado no banco inclinado ou na máquina, braços estendidos.",
+    "Puxe levando os cotovelos para trás e juntando as escápulas.",
+    "Segure 1 s e desça controlando."
+   ],
+   "erros": [
+    "Tirar o peito do apoio para dar impulso.",
+    "Encolher os ombros."
+   ],
+   "alternativas": [
+    "remada-baixa",
+    "remada-serrote",
+    "remada-maquina"
+   ]
+  },
+  "triceps-banco": {
+   "nome": "Mergulho no banco",
+   "semCarga": true,
+   "execucao": [
+    "Mãos na borda do banco atrás de você, pernas à frente.",
+    "Desça dobrando os cotovelos até 90° e suba."
+   ],
+   "erros": [
+    "Descer além do confortável para o ombro."
+   ],
+   "alternativas": [
+    "triceps-corda",
+    "triceps-barra"
+   ]
+  },
+  "pulldown-maquina": {
+   "nome": "Pulldown na máquina",
+   "execucao": [
+    "Ajuste o banco para as coxas ficarem presas sob o apoio.",
+    "Pegadores acima da cabeça, peito aberto.",
+    "Puxe levando os cotovelos para baixo e para trás, até as mãos chegarem na altura do queixo.",
+    "Volte devagar até os braços quase estenderem."
+   ],
+   "erros": [
+    "Jogar o tronco para trás para ajudar.",
+    "Encolher os ombros."
+   ],
+   "alternativas": [
+    "puxada-alta",
+    "barra-fixa-assistida",
+    "puxada-neutra"
+   ]
+  },
+  "remada-curvada-halteres": {
+   "nome": "Remada curvada aberta com halteres",
+   "execucao": [
+    "Em pé, joelhos levemente dobrados, tronco inclinado a cerca de 45°, costas retas.",
+    "Halteres com as palmas para trás, braços estendidos.",
+    "Puxe abrindo os cotovelos para os lados, até a altura do peito, juntando as escápulas.",
+    "Desça devagar."
+   ],
+   "erros": [
+    "Levantar o tronco a cada repetição.",
+    "Arredondar as costas."
+   ],
+   "alternativas": [
+    "remada-maquina",
+    "remada-apoiada",
+    "remada-baixa"
+   ]
+  },
+  "rosca-alternada": {
+   "nome": "Rosca alternada com halteres",
+   "lados": true,
+   "execucao": [
+    "Em pé, halteres ao lado do corpo, palmas para dentro.",
+    "Suba um braço girando a palma para cima, sem tirar o cotovelo do lado do corpo.",
+    "Desça devagar e troque de braço. Os dois braços contam 1."
+   ],
+   "erros": [
+    "Balançar o tronco para subir."
+   ],
+   "alternativas": [
+    "rosca-scott",
+    "rosca-martelo",
+    "rosca-maquina"
+   ]
+  },
+  "rosca-maquina": {
+   "nome": "Rosca na máquina",
+   "execucao": [
+    "Braços no apoio, cotovelos alinhados com o eixo da máquina.",
+    "Suba e desça devagar até quase estender."
+   ],
+   "erros": [
+    "Tirar os cotovelos do apoio."
+   ],
+   "alternativas": [
+    "rosca-alternada",
+    "rosca-scott"
+   ]
+  },
+  "rotacao-externa-halter": {
+   "nome": "Rotação externa deitada de lado",
+   "lados": true,
+   "execucao": [
+    "Deitada de lado, halter leve na mão de cima, cotovelo dobrado a 90° e colado ao corpo.",
+    "Gire o antebraço para cima sem afastar o cotovelo e desça devagar."
+   ],
+   "erros": [
+    "Afastar o cotovelo do corpo."
+   ],
+   "alternativas": [
+    "rotacao-externa-cabo",
+    "rotacao-externa-elastico"
+   ]
+  },
+  "abducao-elastico": {
+   "nome": "Abdução de quadril com elástico",
+   "semCarga": true,
+   "execucao": [
+    "Elástico acima dos joelhos, em pé com os joelhos levemente dobrados ou deitada de lado.",
+    "Afaste uma perna para o lado sem girar o quadril, segure 1 s e volte devagar.",
+    "Serve para ativar o glúteo antes do treino: não precisa cansar."
+   ],
+   "erros": [
+    "Girar o pé para fora.",
+    "Inclinar o tronco."
+   ],
+   "alternativas": [
+    "abdutora-maquina",
+    "ostra"
+   ]
+  },
+  "abdutora-maquina": {
+   "nome": "Cadeira abdutora",
+   "execucao": [
+    "Sentada, costas apoiadas, apoios do lado de fora dos joelhos.",
+    "Abra as pernas, segure 1 s e volte devagar."
+   ],
+   "erros": [
+    "Deixar o peso bater na volta."
+   ],
+   "alternativas": [
+    "abducao-elastico",
+    "ostra"
+   ]
+  },
+  "ostra": {
+   "nome": "Ostra com elástico",
+   "lados": true,
+   "semCarga": true,
+   "execucao": [
+    "Deitada de lado, joelhos dobrados, elástico acima dos joelhos.",
+    "Abra o joelho de cima mantendo os pés juntos, sem girar o quadril para trás.",
+    "Volte devagar."
+   ],
+   "erros": [
+    "Girar o quadril para trás ao abrir."
+   ],
+   "alternativas": [
+    "abducao-elastico",
+    "abdutora-maquina"
+   ]
+  },
+  "elevacao-pelvica-maquina": {
+   "nome": "Elevação pélvica articulada",
+   "execucao": [
+    "Costas no apoio da máquina, cinto ou rolo sobre o quadril, pés firmes na plataforma.",
+    "Suba o quadril até o tronco ficar em linha com as coxas e segure 1 s em cima contraindo o glúteo.",
+    "Desça controlando."
+   ],
+   "erros": [
+    "Arquear a lombar no alto em vez de usar o glúteo.",
+    "Pés muito longe, sentindo mais atrás da coxa."
+   ],
+   "alternativas": [
+    "hip-thrust",
+    "ponte-gluteo"
+   ]
+  },
+  "ponte-gluteo": {
+   "nome": "Ponte de glúteo no colchonete",
+   "execucao": [
+    "Deitada de barriga para cima, joelhos dobrados, pés no chão. Halter ou anilha no quadril, se quiser carga.",
+    "Suba o quadril contraindo o glúteo, segure 1 s e desça."
+   ],
+   "erros": [
+    "Empurrar com a lombar."
+   ],
+   "alternativas": [
+    "elevacao-pelvica-maquina",
+    "hip-thrust"
+   ]
+  },
+  "stiff-halteres": {
+   "nome": "Stiff com halteres",
+   "execucao": [
+    "Em pé, halteres na frente das coxas, joelhos quase estendidos e fixos.",
+    "Leve o quadril para trás e desça os halteres rente às pernas, coluna reta.",
+    "Desça até sentir alongar bem atrás da coxa.",
+    "Volte empurrando o quadril para a frente e contraindo o glúteo."
+   ],
+   "erros": [
+    "Arredondar as costas para descer mais.",
+    "Halteres se afastando das pernas."
+   ],
+   "alternativas": [
+    "terra-romeno-halteres",
+    "terra-romeno",
+    "mesa-flexora"
+   ]
+  },
+  "adutora-cabo": {
+   "nome": "Adução no cabo",
+   "lados": true,
+   "execucao": [
+    "Tornozeleira no cabo baixo, de lado para a polia.",
+    "Leve a perna de dentro cruzando na frente da outra e volte devagar."
+   ],
+   "erros": [
+    "Inclinar o tronco."
+   ],
+   "alternativas": [
+    "adutora-maquina",
+    "copenhague"
+   ]
+  },
+  "abdominal-infra-declinado": {
+   "nome": "Abdominal infra declinado",
+   "execucao": [
+    "Deitada no banco declinado, cabeça na parte alta, segurando o apoio atrás da cabeça.",
+    "Suba as pernas enrolando o quadril para cima, tirando o glúteo do banco.",
+    "Desça devagar sem deixar as pernas caírem."
+   ],
+   "erros": [
+    "Usar o embalo das pernas.",
+    "Arquear a lombar na descida."
+   ],
+   "alternativas": [
+    "abdominal-infra",
+    "abdominal-maquina"
+   ]
+  },
+  "crucifixo-inverso-maquina": {
+   "nome": "Voador inverso",
+   "execucao": [
+    "Sentada de frente para o encosto do voador, pegadores na altura dos ombros.",
+    "Abra os braços para trás até a linha do corpo e volte devagar."
+   ],
+   "erros": [
+    "Encolher os ombros."
+   ],
+   "alternativas": [
+    "face-pull",
+    "crucifixo-inverso"
+   ]
   }
  },
  "sessoes": {
+  "sup1": {
+   "nome": "Superiores 1",
+   "curto": "Sup 1",
+   "titulo": "Costas, peito e ombros",
+   "tipo": "forca",
+   "forte": false,
+   "grupos": [
+    "superiores"
+   ],
+   "dur": "55 min",
+   "blocos": [
+    {
+     "ex": "barra-fixa-assistida",
+     "series": "3 × 6–8",
+     "nota": "RIR 1–2 · anote o peso de ajuda",
+     "descanso": "2 min"
+    },
+    {
+     "ex": "supino-halteres",
+     "series": "4 × 8–10",
+     "nota": "RIR 1–2",
+     "descanso": "2 min"
+    },
+    {
+     "ex": "remada-curvada-halteres",
+     "series": "3 × 10",
+     "nota": "RIR 2",
+     "descanso": "90 s"
+    },
+    {
+     "ex": "desenvolvimento-halteres",
+     "series": "3 × 8–10",
+     "nota": "RIR 2",
+     "descanso": "90 s"
+    },
+    {
+     "biset": true,
+     "descanso": "60 s",
+     "ex": [
+      {
+       "ex": "triceps-barra",
+       "series": "3 × 10–12",
+       "nota": "RIR 1"
+      },
+      {
+       "ex": "face-pull",
+       "series": "3 × 15",
+       "nota": "Controlado"
+      }
+     ]
+    },
+    {
+     "ex": "dead-bug",
+     "series": "3 × 8/lado",
+     "nota": "Lombar colada no chão",
+     "descanso": "45 s"
+    }
+   ]
+  },
+  "inf1": {
+   "nome": "Inferiores 1",
+   "curto": "Inf 1",
+   "titulo": "Quadríceps",
+   "tipo": "forca",
+   "forte": false,
+   "grupos": [
+    "pernas"
+   ],
+   "evitarVespera": [
+    "int",
+    "teste5k",
+    "tenis"
+   ],
+   "dur": "55 min",
+   "blocos": [
+    {
+     "ex": "agachamento-barra",
+     "series": "4 × 6–8",
+     "nota": "RIR 2",
+     "descanso": "2–3 min"
+    },
+    {
+     "ex": "leg-press",
+     "series": "3 × 10–12",
+     "nota": "RIR 1–2",
+     "descanso": "2 min"
+    },
+    {
+     "ex": "cadeira-extensora",
+     "series": "3 × 10–12",
+     "nota": "RIR 1",
+     "descanso": "90 s"
+    },
+    {
+     "ex": "mesa-flexora",
+     "series": "3 × 10–12",
+     "nota": "RIR 1",
+     "descanso": "90 s"
+    },
+    {
+     "biset": true,
+     "descanso": "60 s",
+     "ex": [
+      {
+       "ex": "panturrilha-sentada",
+       "series": "3 × 12–15",
+       "nota": "Descida em 3 s"
+      },
+      {
+       "ex": "adutora-maquina",
+       "series": "3 × 12–15",
+       "nota": "Volta controlada"
+      }
+     ]
+    }
+   ]
+  },
+  "sup2": {
+   "nome": "Superiores 2",
+   "curto": "Sup 2",
+   "titulo": "Máquinas e braços",
+   "tipo": "forca",
+   "forte": false,
+   "grupos": [
+    "superiores"
+   ],
+   "dur": "45 min",
+   "blocos": [
+    {
+     "ex": "pulldown-maquina",
+     "series": "3 × 10–12",
+     "nota": "RIR 1–2",
+     "descanso": "90 s"
+    },
+    {
+     "ex": "supino-inclinado-maquina",
+     "series": "3 × 10–12",
+     "nota": "RIR 1–2",
+     "descanso": "90 s"
+    },
+    {
+     "ex": "remada-maquina",
+     "series": "3 × 10–12",
+     "nota": "RIR 1–2",
+     "descanso": "90 s"
+    },
+    {
+     "biset": true,
+     "descanso": "60 s",
+     "ex": [
+      {
+       "ex": "elevacao-lateral",
+       "series": "3 × 12–15",
+       "nota": "RIR 1"
+      },
+      {
+       "ex": "rosca-alternada",
+       "series": "3 × 10–12",
+       "nota": "RIR 1"
+      }
+     ]
+    },
+    {
+     "ex": "rotacao-externa-cabo",
+     "series": "2 × 15/braço",
+     "nota": "Leve",
+     "descanso": "45 s"
+    }
+   ]
+  },
+  "inf2": {
+   "nome": "Inferiores 2",
+   "curto": "Inf 2",
+   "titulo": "Glúteo e posterior",
+   "tipo": "forca",
+   "forte": false,
+   "grupos": [
+    "pernas"
+   ],
+   "evitarVespera": [
+    "int",
+    "teste5k",
+    "tenis"
+   ],
+   "dur": "60 min",
+   "blocos": [
+    {
+     "ex": "abducao-elastico",
+     "series": "2 × 15",
+     "nota": "Ativação",
+     "descanso": "30 s"
+    },
+    {
+     "ex": "elevacao-pelvica-maquina",
+     "series": "4 × 8–10",
+     "nota": "RIR 1–2 · segure 1 s em cima",
+     "descanso": "2 min"
+    },
+    {
+     "ex": "stiff-halteres",
+     "series": "3 × 8–10",
+     "nota": "RIR 2",
+     "descanso": "2 min"
+    },
+    {
+     "ex": "afundo-reverso",
+     "series": "3 × 10/perna",
+     "nota": "RIR 1–2",
+     "descanso": "90 s"
+    },
+    {
+     "biset": true,
+     "descanso": "60 s",
+     "ex": [
+      {
+       "ex": "pallof-cabo",
+       "series": "3 × 10/lado",
+       "nota": "Sem girar o tronco"
+      },
+      {
+       "ex": "abdominal-infra-declinado",
+       "series": "3 × 12",
+       "nota": "Controlado"
+      }
+     ]
+    }
+   ]
+  },
   "A": {
    "nome": "Força A",
    "titulo": "Inferiores + potência",
@@ -726,7 +1565,8 @@
       }
      ]
     }
-   ]
+   ],
+   "arquivada": true
   },
   "B": {
    "nome": "Força B",
@@ -794,7 +1634,8 @@
      "nota": "Lombar colada no chão",
      "descanso": "45 s"
     }
-   ]
+   ],
+   "arquivada": true
   },
   "C": {
    "nome": "Força C",
@@ -858,7 +1699,8 @@
      "semana": "cond",
      "fixo": true
     }
-   ]
+   ],
+   "arquivada": true
   },
   "int": {
    "nome": "Corrida intervalada",
@@ -1016,7 +1858,8 @@
    "registro": {
     "rotulo": "Distância e FC média",
     "placeholder": "ex.: 7 km, FC 150"
-   }
+   },
+   "arquivada": true
   },
   "longao": {
    "nome": "Longão em Z2",
@@ -1030,7 +1873,7 @@
      "nome": "Longão",
      "dur": "{longao}",
      "alvo": "Z2 · FC até {fcmax:Z2}",
-     "explica": "Ritmo de conversa o tempo todo. Pode trocar por tênis, padel ou trilha. Se já fez o Z2 de sexta, hoje é folga."
+     "explica": "Ritmo de conversa o tempo todo. Pode trocar por tênis ou descansar: o domingo é opcional."
     }
    ],
    "registro": {
@@ -1068,19 +1911,19 @@
    "sessao": "tenis"
   },
   {
-   "sessao": "B"
+   "sessao": "sup1"
   },
   {
    "sessao": "int"
   },
   {
-   "sessao": "A"
+   "sessao": "inf1"
   },
   {
-   "sessao": "z2"
+   "sessao": "sup2"
   },
   {
-   "sessao": "C"
+   "sessao": "inf2"
   },
   {
    "sessao": "longao"
@@ -1088,6 +1931,7 @@
  ],
  "semanaVariante": {
   "rotulo": "Tênis de segunda à noite",
+  "descricao": "Terça vira descanso, Superiores 1 na quarta, tiros na quinta e um treino de perna no sábado. O Inferiores 2 pode ficar de fora.",
   "dias": [
    {
     "sessao": "tenis"
@@ -1096,26 +1940,30 @@
     "sessao": "descanso"
    },
    {
-    "sessao": "B"
+    "sessao": "sup1"
    },
    {
     "sessao": "int"
    },
    {
-    "sessao": "C"
+    "sessao": "sup2"
    },
    {
-    "sessao": "A"
+    "sessao": "inf1",
+    "alternar": [
+     "inf1",
+     "inf2"
+    ]
    },
    {
-    "sessao": "z2curto"
+    "sessao": "livre"
    }
   ]
  },
  "semanas": [
   {
-   "fase": "Retorno",
-   "forca": "3 séries em tudo, RIR 3, cerca de 80% das cargas de agosto",
+   "fase": "Adaptação",
+   "forca": "3 séries em tudo, RIR 2–3",
    "series": {
     "max": 3
    },
@@ -1125,12 +1973,11 @@
     "trote": "3 min"
    },
    "ritmoTiro": "retorno",
-   "longao": "40–50 min",
-   "cond": "3 × 3 min"
+   "longao": "45 min"
   },
   {
-   "fase": "Retorno",
-   "forca": "3 séries em tudo, RIR 3, cerca de 80% das cargas de agosto",
+   "fase": "Adaptação",
+   "forca": "3 séries em tudo, RIR 2–3",
    "series": {
     "max": 3
    },
@@ -1140,19 +1987,18 @@
     "trote": "3 min"
    },
    "ritmoTiro": "retorno",
-   "longao": "40–50 min",
-   "cond": "3 × 3 min"
+   "longao": "45 min"
   },
   {
    "fase": "Base",
-   "forca": "Séries completas, RIR 2",
+   "forca": "Séries completas, RIR como prescrito",
    "tiros": {
     "n": 5,
     "tiro": "3 min",
     "trote": "2:30"
    },
-   "longao": "55 min",
-   "cond": "3 × 4 min"
+   "ritmoTiro": "retorno",
+   "longao": "55 min"
   },
   {
    "fase": "Descarga",
@@ -1166,36 +2012,33 @@
   },
   {
    "fase": "Construção",
-   "forca": "+2,5 a 5% de carga, RIR 1–2",
+   "forca": "Séries completas, RIR 1–2",
    "tiros": {
     "n": 4,
     "tiro": "4 min",
     "trote": "3 min"
    },
-   "longao": "60 min",
-   "cond": "4 × 4 min"
+   "longao": "60 min"
   },
   {
    "fase": "Construção",
-   "forca": "+2,5 a 5% de carga, RIR 1–2",
+   "forca": "Séries completas, RIR 1–2",
    "tiros": {
     "n": 4,
     "tiro": "4 min",
     "trote": "3 min"
    },
-   "longao": "60 min",
-   "cond": "4 × 4 min"
+   "longao": "60 min"
   },
   {
    "fase": "Construção",
-   "forca": "+2,5 a 5% de carga, RIR 1–2",
+   "forca": "Séries completas, RIR 1–2",
    "tiros": {
     "n": 5,
     "tiro": "4 min",
     "trote": "3 min"
    },
-   "longao": "60 min",
-   "cond": "4 × 4 min"
+   "longao": "60 min"
   },
   {
    "fase": "Descarga",
@@ -1209,65 +2052,37 @@
     "tiro": "4 min",
     "trote": "3 min"
    },
-   "longao": "45 min",
-   "cond": "2 × 4 min"
+   "longao": "45 min"
   },
   {
-   "fase": "Intensificação",
-   "forca": "5 × 3 nos principais (agachamento, terra, supino), RIR 2",
-   "series": {
-    "principais": [
-     "agachamento-barra",
-     "levantamento-terra",
-     "supino-halteres"
-    ],
-    "prescricao": "5 × 3"
-   },
+   "fase": "Construção",
+   "forca": "Séries completas, RIR 1–2. Nos exercícios principais, a última série pode ir a RIR 0–1.",
    "tiros": {
     "n": 6,
     "tiro": "3 min",
     "trote": "2 min"
    },
-   "longao": "70 min, últimos 10 em Z3",
-   "cond": "4 × 4 min"
+   "longao": "70 min, últimos 10 em Z3"
   },
   {
-   "fase": "Intensificação",
-   "forca": "5 × 3 nos principais (agachamento, terra, supino), RIR 2",
-   "series": {
-    "principais": [
-     "agachamento-barra",
-     "levantamento-terra",
-     "supino-halteres"
-    ],
-    "prescricao": "5 × 3"
-   },
+   "fase": "Construção",
+   "forca": "Séries completas, RIR 1–2. Nos exercícios principais, a última série pode ir a RIR 0–1.",
    "tiros": {
     "n": 6,
     "tiro": "3 min",
     "trote": "2 min"
    },
-   "longao": "70 min, últimos 10 em Z3",
-   "cond": "4 × 4 min"
+   "longao": "70 min, últimos 10 em Z3"
   },
   {
-   "fase": "Intensificação",
-   "forca": "5 × 3 nos principais (agachamento, terra, supino), RIR 2",
-   "series": {
-    "principais": [
-     "agachamento-barra",
-     "levantamento-terra",
-     "supino-halteres"
-    ],
-    "prescricao": "5 × 3"
-   },
+   "fase": "Construção",
+   "forca": "Séries completas, RIR 1–2. Nos exercícios principais, a última série pode ir a RIR 0–1.",
    "tiros": {
     "n": 6,
     "tiro": "3 min",
     "trote": "2 min"
    },
-   "longao": "70 min, últimos 10 em Z3",
-   "cond": "4 × 4 min"
+   "longao": "70 min, últimos 10 em Z3"
   },
   {
    "fase": "Descarga",
@@ -1281,12 +2096,15 @@
   }
  ],
  "regras": [
-  "Pelo menos 1 dia inteiro sem treino por semana. Faça só um dos opcionais (sexta ou domingo).",
-  "Nunca dois treinos fortes seguidos: tiros, Força A e jogo de tênis longo.",
-  "Pelo menos 48 h entre treinos do mesmo grupo muscular.",
-  "Treino perdido não acumula. Os opcionais saem primeiro; força e tiros são a prioridade.",
-  "Subir carga: fez todas as repetições com o RIR indicado? Na semana seguinte, +2,5 kg nas pernas e +1 a 2 kg nos braços.",
-  "Aliviar: dor articular por mais de 48 h, sono ruim por vários dias ou FC de repouso 5 bpm acima do normal. Troque o intervalado por Z2 ou descanse.",
-  "RIR é quantas repetições ainda sobrariam no fim da série. RIR 2: dava para fazer mais 2."
+  "Nunca treinar perna na véspera dos tiros ou do tênis.",
+  "Tênis longo (mais de 90 min): os tiros do dia seguinte viram corrida em Z2.",
+  "Tênis na segunda à noite: ative a chave na aba Semana. Superiores 1 vai para a quarta, os tiros para a quinta e o sábado fica com o treino de perna feito há mais tempo.",
+  "Treino perdido não acumula.",
+  "Repetir semana: se fizer menos de 3 dos 5 treinos com progressão (Superiores 1 e 2, Inferiores 1 e 2, tiros), o app sugere repetir. Semanas de descarga nunca repetem. Teste de 5 km não feito passa para a semana seguinte.",
+  "Subir carga (progressão dupla): fez o máximo da faixa de repetições em todas as séries? Na semana seguinte, +2,5 kg nas pernas e +1 a 2 kg nos braços.",
+  "RIR é quantas repetições ainda sobrariam no fim da série. RIR 2: dava para fazer mais 2.",
+  "Alimentação: déficit calórico pequeno e proteína de 1,6 a 2,2 g por kg de peso por dia.",
+  "Corrida moderada, sem aumentar o volume.",
+  "Aliviar: dor articular por mais de 48 h, sono ruim por vários dias ou FC de repouso 5 bpm acima do normal. Troque os tiros por Z2 ou descanse."
  ]
 }
