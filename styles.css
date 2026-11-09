@@ -278,3 +278,6 @@ select.text { appearance: none; -webkit-appearance: none; padding-right: 32px;
 .lab-ok, .lab-dim { font-family: var(--mono); font-size: .7rem; text-transform: uppercase; letter-spacing: .06em; }
 .lab-ok { color: var(--ok); }
 .lab-dim { color: var(--muted); }
+.horas { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 10px; }
+.hora { display: flex; flex-direction: column; gap: 2px; font-size: .8rem; color: var(--muted); }
+.hora:last-child:nth-child(odd) { grid-column: 1 / -1; }

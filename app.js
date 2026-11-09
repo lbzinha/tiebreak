@@ -1,7 +1,7 @@
 /* Tiebreak · app de treinos. Tudo fica no aparelho (localStorage); backup manual em JSON. */
 'use strict';
 
-const APP_VERSAO = '1.4.0';
+const APP_VERSAO = '1.4.1';
 const KEY = 'tiebreak:v1';
 const DIAS = ['seg', 'ter', 'qua', 'qui', 'sex', 'sáb', 'dom'];
 const DIAS_LONGO = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
@@ -58,6 +58,7 @@ function estadoVazio() {
     ritmoRetorno: '',
     testes5k: [],
     ultimoBackup: null,
+    horarios: {}, // por dia da semana (0 = segunda) e 'noite' para a segunda com tênis à noite; ficam só no aparelho
     plano: null,
     porPlano: {},
     obs: {},      // ajustes da máquina por exercício
@@ -133,6 +134,9 @@ function infoDia(d) {
       const antes = iso(d);
       base.sessao = base.alternar.filter((x) => P.sessoes[x]).map((x, j) => [x, ultimaVez(x, antes), j]).sort((a, b) => (a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : a[2] - b[2]))[0][0];
     }
+    const hor = S.horarios || {};
+    const hUser = pp().noites[k] && !w.dias && i === 0 ? hor.noite : hor[i];
+    if (hUser && base.sessao !== 'descanso' && base.sessao !== 'livre') base.h = hUser;
     if (base.sessao === 'int' && w.teste) base.sessao = 'teste5k';
     if (base.sessao === 'int' && !w.tiros) base.sessao = 'z2';
   }
@@ -1013,6 +1017,18 @@ function renderAjustes() {
     h('p', { class: 'small muted' }, ub ? `Último backup em ${fmtBarra(ub)} às ${pad(ub.getHours())}:${pad(ub.getMinutes())}.` : 'Nenhum backup feito ainda.'),
     h('p', { class: 'small muted' }, 'Os dados ficam só neste aparelho. O backup gera um arquivo para guardar fora do celular, no iCloud Drive ou no Google Drive.'),
     h('div', { class: 'row wrap' }, h('button', { class: 'btn solid', type: 'button', onclick: fazerBackup }, 'Fazer backup'), h('button', { class: 'btn', type: 'button', onclick: () => $('#f-restaurar').click() }, 'Restaurar'))));
+
+  // horários (ficam só neste aparelho)
+  const DIAS_H = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
+  const campoHora = (chave, rotulo) => {
+    const inp = h('input', { type: 'time', class: 'text', 'aria-label': `Horário: ${rotulo}` });
+    inp.value = (S.horarios && S.horarios[chave]) || '';
+    inp.addEventListener('change', () => { S.horarios ||= {}; if (inp.value) S.horarios[chave] = inp.value; else delete S.horarios[chave]; salvar(); });
+    return h('label', { class: 'hora' }, h('span', null, rotulo), inp);
+  };
+  parts.push(h('section', { class: 'card' }, h('h3', null, 'Horários'),
+    h('p', { class: 'small muted' }, 'Opcional. Ficam só neste aparelho e não vão para o site.'),
+    h('div', { class: 'horas' }, DIAS_H.map((n, i) => campoHora(String(i), n)), P.semanaVariante ? campoHora('noite', 'Segunda com tênis à noite') : null)));
 
   // zonas
   const tb = h('tbody');
