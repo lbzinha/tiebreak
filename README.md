@@ -23,3 +23,9 @@ Web app de treinos (força, corrida e tênis) para instalar na tela de início d
 ## Publicar uma versão nova
 
 Mude `VERSAO` em `sw.js` para o celular baixar os arquivos novos.
+
+## Segurança
+
+- O app não carrega nada de fora: fontes e ícones ficam no repositório, e a política de segurança (CSP) em `index.html` bloqueia scripts, estilos e conexões de outros endereços.
+- Os registros ficam só no aparelho. Nada de dados pessoais, horários ou locais vai para este repositório.
+- Fontes: Barlow Condensed e IBM Plex, sob a SIL Open Font License 1.1 (ver `fonts/`).

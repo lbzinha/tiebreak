@@ -1,7 +1,7 @@
 /* Tiebreak · app de treinos. Tudo fica no aparelho (localStorage); backup manual em JSON. */
 'use strict';
 
-const APP_VERSAO = '1.4.1';
+const APP_VERSAO = '1.5.0';
 const KEY = 'tiebreak:v1';
 const DIAS = ['seg', 'ter', 'qua', 'qui', 'sex', 'sáb', 'dom'];
 const DIAS_LONGO = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
@@ -31,8 +31,8 @@ function h(tag, attrs, ...kids) {
   if (attrs) for (const [k, v] of Object.entries(attrs)) {
     if (v == null || v === false) continue;
     if (k === 'class') e.className = v;
+    else if (k === 'style') continue; // estilos só por classe (CSP)
     else if (k.startsWith('on')) e.addEventListener(k.slice(2), v);
-    else if (k === 'html') e.innerHTML = v;
     else if (v === true) e.setAttribute(k, '');
     else e.setAttribute(k, v);
   }
@@ -426,7 +426,7 @@ function desenharFicha() {
   const fn = pilha[pilha.length - 1];
   if (!fn) { fecharFicha(); return; }
   const body = $('#sheet-body');
-  body.replaceChildren(...[].concat(fn()));
+  body.replaceChildren(...[].concat(fn()).filter((x) => x != null && x !== false));
   body.scrollTop = 0;
   $('#sheet-back').hidden = pilha.length < 2;
   const wrap = $('#sheet');
@@ -619,7 +619,7 @@ function fichaAdicionar(d, tipo, jaNaLista) {
     if (txt && !itens.some(([, n]) => norm(n) === q)) {
       linhas[itens.length ? 'push' : 'unshift'](h('li', null, h('button', { type: 'button', onclick: () => criarExtra(d, tipo, txt) }, h('span', { class: 'grow' }, h('b', null, `Criar "${txt}"`), h('small', null, 'exercício novo, guardado para os próximos treinos')), h('span', { class: 'chev muted' }, '+'))));
     }
-    lista.replaceChildren(...(linhas.length ? linhas : [h('li', null, h('p', { class: 'muted small', style: 'padding:12px' }, 'Digite o nome do exercício.'))]));
+    lista.replaceChildren(...(linhas.length ? linhas : [h('li', null, h('p', { class: 'muted small pad12' }, 'Digite o nome do exercício.'))]));
   };
   busca.addEventListener('input', desenhar);
   desenhar();
@@ -750,7 +750,7 @@ function linhaEx(d, tipo, slot, inf) {
     const reps = h('input', { placeholder: 'reps', 'aria-label': `Repetições, só se mudar: ${ex.nome}`, autocomplete: 'off' });
     reps.value = (it && it.reps) || '';
     reps.addEventListener('input', atualiza('reps'));
-    ins.append(h('label', { class: 'fld', style: 'flex:1;max-width:9.5rem' }, reps));
+    ins.append(h('label', { class: 'fld reps' }, reps));
     const hist = cargasDe(key, antes);
     if (hist.length) ins.append(h('button', { class: 'last', type: 'button', onclick: () => abrirFicha(() => fichaExercicio(key, { slot, d, tipo, w: inf.w, foco: 'cargas' })) }, 'histórico'));
     main.append(ins);
@@ -787,11 +787,11 @@ function conteudoOutro(d, tipo, inf) {
     box.append(lab);
     if (s.registro.longo) {
       const lg = !!(log && log.longo);
-      box.append(h('button', { class: 'chip' + (lg ? ' on' : ''), type: 'button', 'aria-pressed': lg ? 'true' : 'false', style: 'align-self:flex-start', onclick: () => { const l = garantir(d, tipo); l.longo = !l.longo; tocar(l); renderHoje(); } }, 'Jogo longo (mais de 90 min)'));
+      box.append(h('button', { class: 'chip start' + (lg ? ' on' : ''), type: 'button', 'aria-pressed': lg ? 'true' : 'false', onclick: () => { const l = garantir(d, tipo); l.longo = !l.longo; tocar(l); renderHoje(); } }, 'Jogo longo (mais de 90 min)'));
     }
     let testeBtn = null;
     if (s.registro.teste) {
-      testeBtn = h('button', { class: 'btn small', type: 'button', style: 'align-self:flex-start', onclick: () => propor5k(inp.value, iso(d)) }, 'Atualizar ritmos das zonas com este tempo');
+      testeBtn = h('button', { class: 'btn small start', type: 'button', onclick: () => propor5k(inp.value, iso(d)) }, 'Atualizar ritmos das zonas com este tempo');
       testeBtn.hidden = !parseTempo(inp.value);
       box.append(testeBtn);
     }
@@ -888,7 +888,7 @@ function fichaSessao(tipo, w) {
       h('span', { class: 'grow' }, P.exercicios[sl.ex].nome, h('small', null, [sl.series, sl.bloco.biset ? `bi-set com ${P.exercicios[sl.par.ex].nome}` : null].filter(Boolean).join(' · '))), h('span', { class: 'chev' }, '›'))))));
   } else {
     for (const b of s.blocos || []) {
-      out.push(h('div', { class: 'box' }, h('b', null, [tpl(b.rep || '', w), b.nome].filter(Boolean).join(' ')), ' ', h('span', { class: 'num' }, [tpl(b.dur || '', w), tpl(b.alvo || '', w)].filter(Boolean).join(' · ')), b.explica ? h('p', { style: 'margin-top:4px' }, tpl(b.explica, w, true)) : null));
+      out.push(h('div', { class: 'box' }, h('b', null, [tpl(b.rep || '', w), b.nome].filter(Boolean).join(' ')), ' ', h('span', { class: 'num' }, [tpl(b.dur || '', w), tpl(b.alvo || '', w)].filter(Boolean).join(' · ')), b.explica ? h('p', { class: 'mt4' }, tpl(b.explica, w, true)) : null));
     }
     for (const n of s.notas || []) out.push(h('p', { class: 'muted small' }, n));
   }
@@ -898,7 +898,7 @@ function fichaZonas() {
   return [h('span', { class: 'eyebrow' }, 'Guia'), h('h2', null, 'Suas zonas'),
     h('table', { class: 'zones' }, h('thead', null, h('tr', null, h('th', null, 'Zona'), h('th', null, 'FC'), h('th', null, 'Ritmo'))),
       h('tbody', null, ZONAS.map((z) => h('tr', null,
-        h('td', null, h('span', { class: 'zname' }, h('i', { style: `background:${COR_ZONA[z]}` }), `${z} ${(P.zonasInfo[z] || {}).nome || ''}`), h('br'), h('span', { class: 'muted small' }, (P.zonasInfo[z] || {}).sensacao || '')),
+        h('td', null, h('span', { class: 'zname' }, h('i', { class: `zc-${z}` }), `${z} ${(P.zonasInfo[z] || {}).nome || ''}`), h('br'), h('span', { class: 'muted small' }, (P.zonasInfo[z] || {}).sensacao || '')),
         h('td', { class: 'num small' }, fcTxt(z) || '—'), h('td', { class: 'num small' }, ritmoTxt(z) || '—'))))),
     S.ritmoRetorno ? h('p', { class: 'small muted' }, `Tiros nas semanas de retorno: ${S.ritmoRetorno}/km.`) : null,
     h('p', { class: 'small muted' }, 'Na Z2, siga a frequência cardíaca, não o ritmo. Para mudar os valores, vá em Ajustes.')];
@@ -933,7 +933,7 @@ function renderSemana() {
     h('div', { class: 'mid' }, h('h2', null, titulo), sub),
     h('button', { class: 'icon-btn', type: 'button', 'aria-label': 'Próxima semana', disabled: k > ultimaSemanaCal(), onclick: () => { semanaVista++; renderSemana(); } }, '›'))];
 
-  if (n) parts.push(h('p', { class: 'muted small', style: 'text-align:center' }, `${principaisFeitos(k)} de ${P.principais.length} treinos principais feitos`));
+  if (n) parts.push(h('p', { class: 'muted small center' }, `${principaisFeitos(k)} de ${P.principais.length} treinos principais feitos`));
 
   parts.push(h('ul', { class: 'days' }, Array.from({ length: 7 }, (_, i) => {
     const d = addDays(ini, i);
@@ -966,7 +966,7 @@ function renderSemana() {
 
   const wG = w || P.semanas[(numPlano(semanaCal(HOJE)) || 1) - 1];
   const item = (rot, sub2, fn) => h('li', null, h('button', { type: 'button', onclick: () => abrirFicha(fn) }, h('span', { class: 'grow' }, rot, sub2 ? h('small', null, sub2) : null), h('span', { class: 'chev muted' }, '›')));
-  parts.push(h('h3', { style: 'margin-top:6px' }, 'Guia'));
+  parts.push(h('h3', { class: 'mt6' }, 'Guia'));
   parts.push(h('ul', { class: 'guide' },
     item(`As ${P.semanas.length} semanas e as regras`, 'fases e regras do plano', () => fichaPlano()),
     P.aquecimento && P.aquecimento.passos && P.aquecimento.passos.length ? item('Aquecimento', P.aquecimento.dur, () => fichaAquecimento()) : null,
@@ -1037,7 +1037,7 @@ function renderAjustes() {
     const rt = h('input', { value: ritmoEdit(z), placeholder: z === 'Z1' ? 'acima de 6:20' : '5:27–6:20', 'aria-label': `Ritmo da ${z}` });
     fc.addEventListener('change', () => { Object.assign(S.zonas[z], parseFc(fc.value)); salvar(); fc.value = fcEdit(z); });
     rt.addEventListener('change', () => { Object.assign(S.zonas[z], parseRitmo(rt.value)); salvar(); rt.value = ritmoEdit(z); });
-    tb.append(h('tr', null, h('td', null, h('span', { class: 'zname' }, h('i', { style: `background:${COR_ZONA[z]}` }), z)), h('td', null, fc), h('td', null, rt)));
+    tb.append(h('tr', null, h('td', null, h('span', { class: 'zname' }, h('i', { class: `zc-${z}` }), z)), h('td', null, fc), h('td', null, rt)));
   }
   const rr = h('input', { class: 'text', value: S.ritmoRetorno, placeholder: '4:55–5:10', 'aria-label': 'Ritmo dos tiros nas semanas de retorno' });
   rr.addEventListener('change', () => { const r = parseRitmo(rr.value); S.ritmoRetorno = r.pRapido && r.pLento ? `${mmss(r.pRapido)}–${mmss(r.pLento)}` : rr.value.trim(); rr.value = S.ritmoRetorno; salvar(); });
@@ -1060,7 +1060,7 @@ function renderAjustes() {
     h('div', { class: 'row wrap' }, h('button', { class: 'btn', type: 'button', onclick: () => $('#f-plano').click() }, 'Carregar plano'),
       custom && PADRAO ? h('button', { class: 'btn ghost', type: 'button', onclick: usarPadrao }, 'Usar o plano padrão') : null)));
 
-  parts.push(h('p', { class: 'small muted', style: 'text-align:center' }, `Tiebreak ${APP_VERSAO} · ${Object.keys(S.registros).length} registros neste aparelho`));
+  parts.push(h('p', { class: 'small muted center' }, `Tiebreak ${APP_VERSAO} · ${Object.keys(S.registros).length} registros neste aparelho`));
   v.replaceChildren(...parts);
 }
 
@@ -1077,7 +1077,7 @@ function propor5k(texto, dataIso) {
   abrirFicha(() => [h('span', { class: 'eyebrow' }, 'Teste de 5 km'), h('h2', null, `${mmss(t)} · ${mmss(p5)}/km`),
     h('p', { class: 'muted small' }, 'Novos ritmos das zonas. A frequência cardíaca não muda.'),
     h('table', { class: 'zones' }, h('thead', null, h('tr', null, h('th', null, ''), h('th', null, 'Atual'), h('th', null, 'Novo'))),
-      h('tbody', null, ZONAS.map((z) => h('tr', null, h('td', null, h('span', { class: 'zname' }, h('i', { style: `background:${COR_ZONA[z]}` }), z)), h('td', { class: 'num small muted' }, ritmoEdit(z) || '—'), h('td', { class: 'num small' }, fmtR(novas[z])))))),
+      h('tbody', null, ZONAS.map((z) => h('tr', null, h('td', null, h('span', { class: 'zname' }, h('i', { class: `zc-${z}` }), z)), h('td', { class: 'num small muted' }, ritmoEdit(z) || '—'), h('td', { class: 'num small' }, fmtR(novas[z])))))),
     h('p', { class: 'muted small' }, 'Depois das semanas de retorno, os tiros usam o ritmo da Z5.'),
     h('div', { class: 'row' }, h('button', { class: 'btn solid', type: 'button', onclick: () => {
       for (const z of ZONAS) Object.assign(S.zonas[z], novas[z]);
