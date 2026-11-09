@@ -267,3 +267,14 @@ select.text { appearance: none; -webkit-appearance: none; padding-right: 32px;
 @keyframes up { from { transform: translateY(40px); opacity: .4; } }
 @keyframes fade { from { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+/* 1.4: ajustes da máquina, carga herdada, extras, finalizar */
+.ex-obs { align-self: flex-start; background: none; border: 0; padding: 0; font-size: .78rem; color: var(--muted); text-align: left; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ex-obs.on { color: var(--court); }
+.fld input.herdada { color: var(--muted); }
+.add-btn { width: 100%; border: 1.5px dashed var(--line); background: transparent; color: var(--court); border-radius: var(--r); padding: 11px; font-weight: 600; }
+.btn.finish { align-self: stretch; justify-content: center; padding: 11px; font-size: 1rem; }
+.summary h3 { color: var(--ok); }
+.lab-ok, .lab-dim { font-family: var(--mono); font-size: .7rem; text-transform: uppercase; letter-spacing: .06em; }
+.lab-ok { color: var(--ok); }
+.lab-dim { color: var(--muted); }

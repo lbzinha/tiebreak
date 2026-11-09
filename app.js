@@ -1,7 +1,7 @@
 /* Tiebreak · app de treinos. Tudo fica no aparelho (localStorage); backup manual em JSON. */
 'use strict';
 
-const APP_VERSAO = '1.3.0';
+const APP_VERSAO = '1.4.0';
 const KEY = 'tiebreak:v1';
 const DIAS = ['seg', 'ter', 'qua', 'qui', 'sex', 'sáb', 'dom'];
 const DIAS_LONGO = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
@@ -60,6 +60,8 @@ function estadoVazio() {
     ultimoBackup: null,
     plano: null,
     porPlano: {},
+    obs: {},      // ajustes da máquina por exercício
+    extras: {},   // exercícios criados pela usuária
   };
 }
 let S = estadoVazio();
@@ -143,6 +145,8 @@ function feito(log) {
   if (sess(log.sessao).tipo === 'forca') return Object.values(log.itens || {}).some((x) => x.feito);
   return !!log.feito;
 }
+/* Para o histórico: conta também exercícios avulsos num dia de corrida, tênis ou descanso. */
+function feitoAlgo(log) { return feito(log) || !!(log && Object.values(log.itens || {}).some((x) => x.feito)); }
 function sugerido(d) { const inf = infoDia(d); const t = pp().trocas[iso(d)]; return t && P.sessoes[t] && !P.sessoes[t].arquivada ? t : inf.base.sessao; }
 function efetiva(d) { const l = reg(d); return (l && l.sessao) || sugerido(d); }
 function forte(id, log) { const s = sess(id); return !!(s.forte || (s.forteSeLongo && log && log.longo)); }
@@ -265,6 +269,15 @@ function seriesSemana(exId, series, w) {
 const numSeries = (s) => { const m = String(s).match(/^(\d+)\s*×/); return m ? Number(m[1]) : null; };
 
 /* ---------- cargas ---------- */
+/* Exercício do plano, criado pela usuária, ou um nome solto. */
+function exDe(code) {
+  return P.exercicios[code] || (S.extras && S.extras[code] && Object.assign({ execucao: [], erros: [], alternativas: [] }, S.extras[code])) || { nome: code, execucao: [], erros: [], alternativas: [] };
+}
+const numCarga = (c) => { const n = parseFloat(String(c || '').replace(',', '.')); return Number.isFinite(n) ? n : null; };
+function ultimaCarga(exId, antesDe) { const x = cargasDe(exId, antesDe).find((y) => y.carga); return x ? x.carga : ''; }
+function slug(t) {
+  return String(t).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40) || 'exercicio';
+}
 function cargasDe(exId, antesDe) {
   const out = [];
   for (const l of Object.values(S.registros)) {
@@ -536,7 +549,14 @@ function conteudoForca(d, tipo, inf) {
 
   const slots = slotsForca(tipo, w);
   const nFeitos = slots.filter((x) => { const r = itemDoSlot(log, x.ex); return r.it && r.it.feito; }).length;
-  parts.push(h('div', { class: 'progress' }, `${nFeitos} de ${slots.length} feitos · reps em branco = como planejado`));
+  const extras = extrasDoDia(log);
+
+  if (log && log.finalizado) {
+    parts.push(resumoFinal(d, tipo, slots, extras));
+    return parts;
+  }
+  const nExtra = extras.filter((k) => log.itens[k].feito).length;
+  parts.push(h('div', { class: 'progress' }, `${nFeitos} de ${slots.length} feitos${nExtra ? ` · +${nExtra} extra` : ''} · reps em branco = como planejado`));
 
   const lista = h('div', { class: 'exlist' });
   let i = 0;
@@ -556,43 +576,170 @@ function conteudoForca(d, tipo, inf) {
     }
   }
   parts.push(lista);
+  parts.push(...blocoExtras(d, tipo, inf, slots.map((x) => itemDoSlot(log, x.ex).key)));
+  const temFeito = nFeitos + nExtra > 0;
+  parts.push(h('button', { class: 'btn solid finish', type: 'button', disabled: !temFeito, onclick: () => finalizar(d, tipo) }, 'Finalizar treino'));
   return parts;
+}
+
+/* ---------- exercícios fora do programado ---------- */
+function extrasDoDia(log) {
+  if (!log || !log.itens) return [];
+  return Object.keys(log.itens).filter((k) => log.itens[k].extra).sort((a, b) => (log.itens[a].adicionado || 0) - (log.itens[b].adicionado || 0));
+}
+function blocoExtras(d, tipo, inf, jaNaLista) {
+  const log = reg(d);
+  const extras = extrasDoDia(log);
+  const out = [];
+  if (extras.length) {
+    out.push(h('section', { class: 'block' },
+      h('div', { class: 'block-head' }, h('span', { class: 't' }, 'Fora do programado')),
+      h('ul', null, extras.map((k) => linhaEx(d, tipo, { ex: k, series: '', bloco: {}, extra: true }, inf)))));
+  }
+  out.push(h('button', { class: 'add-btn', type: 'button', onclick: () => abrirFicha(() => fichaAdicionar(d, tipo, (jaNaLista || []).concat(extras))) }, '+ Adicionar exercício'));
+  return out;
+}
+function fichaAdicionar(d, tipo, jaNaLista) {
+  const busca = h('input', { class: 'text', placeholder: 'Buscar ou digitar o nome', 'aria-label': 'Buscar exercício', autocomplete: 'off' });
+  const lista = h('ul', { class: 'guide' });
+  const catalogo = () => {
+    const todos = Object.assign({}, S.extras || {}, P.exercicios);
+    return Object.keys(todos).filter((k) => !jaNaLista.includes(k)).map((k) => [k, exDe(k).nome]).sort((a, b) => a[1].localeCompare(b[1], 'pt'));
+  };
+  const norm = (t) => slug(t).replace(/-/g, ' ');
+  const desenhar = () => {
+    const q = norm(busca.value.trim());
+    const itens = catalogo().filter(([, n]) => !q || norm(n).includes(q)).slice(0, 40);
+    const linhas = itens.map(([k, n]) => h('li', null, h('button', { type: 'button', onclick: () => adicionarExtra(d, tipo, k) }, h('span', { class: 'grow' }, n), h('span', { class: 'chev muted' }, '+'))));
+    const txt = busca.value.trim();
+    if (txt && !itens.some(([, n]) => norm(n) === q)) {
+      linhas[itens.length ? 'push' : 'unshift'](h('li', null, h('button', { type: 'button', onclick: () => criarExtra(d, tipo, txt) }, h('span', { class: 'grow' }, h('b', null, `Criar "${txt}"`), h('small', null, 'exercício novo, guardado para os próximos treinos')), h('span', { class: 'chev muted' }, '+'))));
+    }
+    lista.replaceChildren(...(linhas.length ? linhas : [h('li', null, h('p', { class: 'muted small', style: 'padding:12px' }, 'Digite o nome do exercício.'))]));
+  };
+  busca.addEventListener('input', desenhar);
+  desenhar();
+  setTimeout(() => busca.focus(), 250);
+  return [h('span', { class: 'eyebrow' }, 'Fora do programado'), h('h2', null, 'Adicionar exercício'), busca, lista];
+}
+function criarExtra(d, tipo, nome) {
+  let code = slug(nome);
+  if (P.exercicios[code] && P.exercicios[code].nome.toLowerCase() !== nome.toLowerCase()) code = 'x-' + code;
+  S.extras ||= {};
+  if (!P.exercicios[code]) S.extras[code] = { nome: nome.trim() };
+  adicionarExtra(d, tipo, code);
+}
+function adicionarExtra(d, tipo, code) {
+  const l = garantir(d, tipo);
+  if (!l.itens[code]) l.itens[code] = { nome: exDe(code).nome, feito: false, extra: true, adicionado: Date.now() };
+  tocar(l);
+  fecharFicha();
+  renderHoje();
+  toast(`${exDe(code).nome} adicionado`);
+}
+function removerExtra(d, code) {
+  const l = reg(d);
+  if (!l || !l.itens[code]) return;
+  delete l.itens[code];
+  tocar(l); fecharFicha(); renderHoje();
+}
+
+/* ---------- finalizar ---------- */
+function finalizar(d, tipo) {
+  const l = garantir(d, tipo);
+  const antes = iso(d);
+  for (const [k, it] of Object.entries(l.itens)) {
+    if (it.feito && !('carga' in it) && !exDe(k).semCarga) { const u = ultimaCarga(k, antes); if (u) { it.carga = u; it.cargaMantida = true; } }
+  }
+  l.finalizado = new Date().toISOString();
+  tocar(l);
+  window.scrollTo(0, 0);
+  renderHoje();
+  toast('Treino finalizado');
+}
+function resumoFinal(d, tipo, slots, extras) {
+  const log = reg(d);
+  const antes = iso(d);
+  const feitos = []; const fora = []; const subiu = [];
+  const ver = (k, it) => {
+    if (!it || !it.feito) return;
+    feitos.push(k);
+    const a = numCarga(ultimaCarga(k, antes)); const n = numCarga(it.carga);
+    if (a != null && n != null && n > a) subiu.push(`${exDe(k).nome} (${ultimaCarga(k, antes)} → ${it.carga} kg)`);
+  };
+  for (const sl of slots) { const r = itemDoSlot(log, sl.ex); if (r.it && r.it.feito) ver(r.key, r.it); else fora.push(exDe(r.key).nome); }
+  for (const k of extras) ver(k, log.itens[k]);
+  const hora = new Date(log.finalizado);
+  return h('section', { class: 'card summary' },
+    h('div', { class: 'spread' }, h('h3', null, 'Treino finalizado'), h('span', { class: 'num small muted' }, `${pad(hora.getHours())}:${pad(hora.getMinutes())}`)),
+    h('p', null, h('b', { class: 'num' }, `${feitos.length - extras.filter((k) => log.itens[k].feito).length} de ${slots.length}`), ' exercícios feitos', extras.length ? ` · +${extras.filter((k) => log.itens[k].feito).length} fora do programado` : ''),
+    subiu.length ? h('div', null, h('span', { class: 'lab-ok' }, 'Carga subiu'), h('ul', { class: 'bul small' }, subiu.map((t) => h('li', null, t)))) : null,
+    fora.length ? h('div', null, h('span', { class: 'lab-dim' }, 'Ficou de fora'), h('p', { class: 'small muted' }, fora.join(' · '))) : null,
+    h('div', { class: 'row' }, h('button', { class: 'btn small ghost', type: 'button', onclick: () => { const l = reg(d); delete l.finalizado; tocar(l); renderHoje(); } }, 'Editar')));
+}
+
+/* ---------- ajustes da máquina ---------- */
+function fichaObs(code) {
+  const ta = h('textarea', { class: 'text', rows: 3, placeholder: 'ex.: banco 4, encosto 2, pino na 3ª posição', 'aria-label': 'Ajustes da máquina' });
+  ta.value = (S.obs && S.obs[code]) || '';
+  setTimeout(() => ta.focus(), 250);
+  return [h('span', { class: 'eyebrow' }, exDe(code).nome), h('h2', null, 'Ajustes e observações'),
+    h('p', { class: 'small muted' }, 'Fica salvo para este exercício e aparece em todos os treinos.'), ta,
+    h('div', { class: 'row' }, h('button', { class: 'btn solid', type: 'button', onclick: () => {
+      S.obs ||= {};
+      const v = ta.value.trim();
+      if (v) S.obs[code] = v; else delete S.obs[code];
+      salvar(); fecharFicha(); renderHoje();
+    } }, 'Salvar'), h('button', { class: 'btn ghost', type: 'button', onclick: fecharFicha }, 'Cancelar'))];
 }
 
 function linhaEx(d, tipo, slot, inf) {
   const log = reg(d);
-  const { key, it } = itemDoSlot(log, slot.ex);
-  const ex = P.exercicios[key] || P.exercicios[slot.ex];
+  const { key, it } = slot.extra ? { key: slot.ex, it: log && log.itens[slot.ex] } : itemDoSlot(log, slot.ex);
+  const ex = slot.extra ? exDe(key) : (P.exercicios[key] || exDe(slot.ex));
   const on = !!(it && it.feito);
+  const antes = iso(d);
+  const ultima = ex.semCarga ? '' : ultimaCarga(key, antes);
   const chk = h('button', { class: 'chk' + (on ? ' on' : ''), type: 'button', 'aria-pressed': on ? 'true' : 'false', 'aria-label': (on ? 'Desmarcar ' : 'Marcar como feito: ') + ex.nome }, on ? (it.ordem ? `${it.ordem}º` : '✓') : '');
   chk.addEventListener('click', () => {
     const l = garantir(d, tipo);
     const atual = l.itens[key] || { nome: ex.nome };
-    if (atual.feito) { atual.feito = false; delete atual.ordem; }
-    else { atual.feito = true; atual.ordem = Math.max(0, ...Object.values(l.itens).map((x) => (x.feito && x.ordem) || 0)) + 1; }
+    if (atual.feito) {
+      atual.feito = false; delete atual.ordem;
+      if (atual.cargaMantida) { delete atual.carga; delete atual.cargaMantida; }
+    } else {
+      atual.feito = true; atual.ordem = Math.max(0, ...Object.values(l.itens).map((x) => (x.feito && x.ordem) || 0)) + 1;
+      if (!('carga' in atual) && ultima) { atual.carga = ultima; atual.cargaMantida = true; }
+    }
     atual.nome = ex.nome;
-    if (key !== slot.ex) atual.lugar = slot.ex;
+    if (!slot.extra && key !== slot.ex) atual.lugar = slot.ex;
     l.itens[key] = atual;
     tocar(l);
     renderHoje();
   });
-  const nm = h('button', { class: 'ex-name', type: 'button', onclick: () => abrirFicha(() => fichaExercicio(key, { slot, d, tipo, w: inf.w })) }, ex.nome, key !== slot.ex ? h('span', { class: 'swapped' }, 'troca') : null);
-  const sub = h('div', { class: 'ex-sub' }, h('b', null, slot.series), slot.nota ? ` · ${tpl(slot.nota, inf.w)}` : '', !slot.bloco.biset && slot.descanso ? ` · ${slot.descanso}` : '');
+  const nm = h('button', { class: 'ex-name', type: 'button', onclick: () => abrirFicha(() => fichaExercicio(key, { slot, d, tipo, w: inf.w })) }, ex.nome, !slot.extra && key !== slot.ex ? h('span', { class: 'swapped' }, 'troca') : null);
+  const sub = slot.extra ? null : h('div', { class: 'ex-sub' }, h('b', null, slot.series), slot.nota ? ` · ${tpl(slot.nota, inf.w)}` : '', !slot.bloco.biset && slot.descanso ? ` · ${slot.descanso}` : '');
   const main = h('div', { class: 'ex-main' }, nm, sub);
   if (!slot.fixo) {
+    const obs = S.obs && S.obs[key];
+    main.append(h('button', { class: 'ex-obs' + (obs ? ' on' : ''), type: 'button', onclick: () => abrirFicha(() => fichaObs(key)) }, obs ? `⚙ ${obs}` : '+ ajustes'));
     const ins = h('div', { class: 'ex-in' });
     const atualiza = (campo) => (e) => {
       const l = garantir(d, tipo);
       const atual = l.itens[key] || { nome: ex.nome, feito: false };
       atual.nome = ex.nome;
       atual[campo] = e.target.value.trim();
-      if (key !== slot.ex) atual.lugar = slot.ex;
+      if (campo === 'carga') { delete atual.cargaMantida; e.target.classList.remove('herdada'); }
+      if (!slot.extra && key !== slot.ex) atual.lugar = slot.ex;
       l.itens[key] = atual;
       tocar(l);
     };
     if (!ex.semCarga) {
       const kg = h('input', { inputmode: 'decimal', placeholder: 'carga', 'aria-label': `Carga em kg: ${ex.nome}`, autocomplete: 'off' });
-      kg.value = (it && it.carga) || '';
+      const propria = it && 'carga' in it && !it.cargaMantida;
+      kg.value = propria ? it.carga : (it && it.carga) || ultima || '';
+      if (!propria && kg.value) kg.classList.add('herdada');
+      kg.addEventListener('focus', () => { if (kg.classList.contains('herdada')) kg.select(); });
       kg.addEventListener('input', atualiza('carga'));
       ins.append(h('label', { class: 'fld' }, kg, h('span', null, 'kg')));
     }
@@ -600,9 +747,8 @@ function linhaEx(d, tipo, slot, inf) {
     reps.value = (it && it.reps) || '';
     reps.addEventListener('input', atualiza('reps'));
     ins.append(h('label', { class: 'fld', style: 'flex:1;max-width:9.5rem' }, reps));
-    const hist = cargasDe(key, iso(d));
-    const ult = hist.find((x) => x.carga);
-    if (ult) ins.append(h('button', { class: 'last', type: 'button', onclick: () => abrirFicha(() => fichaExercicio(key, { slot, d, tipo, w: inf.w, foco: 'cargas' })) }, `última ${ult.carga} kg`));
+    const hist = cargasDe(key, antes);
+    if (hist.length) ins.append(h('button', { class: 'last', type: 'button', onclick: () => abrirFicha(() => fichaExercicio(key, { slot, d, tipo, w: inf.w, foco: 'cargas' })) }, 'histórico'));
     main.append(ins);
     const n = dicaSubir(hist);
     if (n) main.append(h('p', { class: 'hint' }, `Mesma carga há ${n} treinos. Acho que dá para subir.`));
@@ -652,6 +798,7 @@ function conteudoOutro(d, tipo, inf) {
     parts.push(box);
   }
   if (s.notas) parts.push(h('div', { class: 'notes' }, s.notas.map((n) => h('p', null, tpl(n, w, true)))));
+  parts.push(...blocoExtras(d, tipo, inf, []));
   return parts;
 }
 
@@ -662,8 +809,8 @@ function fichaAquecimento(id) {
 }
 function fichaExercicio(exId, ctx) {
   ctx = ctx || {};
-  const ex = P.exercicios[exId];
-  const slot = ctx.slot;
+  const ex = exDe(exId);
+  const slot = ctx.slot && !ctx.slot.extra ? ctx.slot : null;
   const out = [];
   out.push(h('span', { class: 'eyebrow' }, [ctx.tipo ? sess(ctx.tipo).nome : null, slot && slot.bloco && slot.bloco.biset ? 'bi-set' : null].filter(Boolean).join(' · ') || 'Exercício'));
   out.push(h('h2', null, ex.nome));
@@ -679,17 +826,22 @@ function fichaExercicio(exId, ctx) {
     }
   }
   if (ex.lados) out.push(h('div', { class: 'box' }, h('b', null, 'Um lado de cada vez: '), 'faça todas as repetições de um lado e depois as do outro. Os dois lados juntos contam como 1 série.'));
-  out.push(h('h3', null, 'Como fazer'), h('ol', null, ex.execucao.map((t) => h('li', null, tpl(t, ctx.w, true)))));
+  const obs = S.obs && S.obs[exId];
+  out.push(h('button', { class: 'tap-row', type: 'button', onclick: () => abrirFicha(() => fichaObs(exId), true) }, h('span', { class: 'grow' }, h('b', null, 'Ajustes: '), obs || h('span', { class: 'muted' }, 'nenhum anotado')), h('span', { class: 'chev' }, '›')));
+  if (ex.execucao && ex.execucao.length) out.push(h('h3', null, 'Como fazer'), h('ol', null, ex.execucao.map((t) => h('li', null, tpl(t, ctx.w, true)))));
   if (ex.erros && ex.erros.length) out.push(h('h3', null, 'Evite'), h('ul', { class: 'bul' }, ex.erros.map((t) => h('li', null, t))));
 
   if (exId !== 'condicionamento') {
     const hist = cargasDe(exId);
     const sec = [h('h3', null, 'Cargas anteriores')];
+    const seq = hist.filter((x) => x.carga).map((x) => x.carga).reverse().filter((c, i, a) => i === 0 || c !== a[i - 1]);
+    if (seq.length > 1) sec.push(h('p', { class: 'num small' }, h('b', null, 'Progressão: '), seq.slice(-6).join(' → ') + ' kg'));
     if (hist.length) sec.push(h('ul', { class: 'loads' }, hist.slice(0, 30).map((x) => h('li', null, h('span', null, fmtBarra(fromIso(x.data))), h('span', null, [x.carga ? `${x.carga} kg` : (ex.semCarga ? 'feito' : 'sem carga'), x.reps ? ` · ${x.reps}` : ''].join(''))))));
     else sec.push(h('p', { class: 'muted small' }, 'Nenhum registro ainda.'));
     if (ctx.foco === 'cargas') out.splice(2, 0, ...sec); else out.push(...sec);
   }
 
+  if (ctx.d && ctx.slot && ctx.slot.extra) out.push(h('button', { class: 'btn ghost', type: 'button', onclick: () => removerExtra(ctx.d, exId) }, 'Remover deste treino'));
   if (ctx.d && slot) {
     const original = slot.ex;
     const opcoes = [original, ...(P.exercicios[original].alternativas || [])].filter((x, i, a) => a.indexOf(x) === i && x !== exId && P.exercicios[x]);
@@ -827,11 +979,12 @@ function resumo(l) {
     const c = its.filter((x) => x.carga).length;
     return `${its.length} ${its.length === 1 ? 'exercício' : 'exercícios'}${c ? ` · ${c} com carga` : ''}`;
   }
-  return [l.detalhe, l.longo ? 'jogo longo' : null].filter(Boolean).join(' · ') || 'Feito';
+  const nEx = Object.values(l.itens || {}).filter((x) => x.feito).length;
+  return [l.detalhe, l.longo ? 'jogo longo' : null, nEx ? `+${nEx} ${nEx === 1 ? 'exercício' : 'exercícios'}` : null].filter(Boolean).join(' · ') || 'Feito';
 }
 function renderHistorico() {
   const v = $('#v-historico');
-  const lista = Object.values(S.registros).filter((l) => l && l.data && feito(l)).sort((a, b) => (a.data < b.data ? 1 : -1));
+  const lista = Object.values(S.registros).filter((l) => l && l.data && feitoAlgo(l)).sort((a, b) => (a.data < b.data ? 1 : -1));
   const parts = [h('h1', null, 'Histórico')];
   if (!lista.length) { parts.push(h('p', { class: 'empty' }, 'Nenhum treino registrado ainda. Marque o que fez na aba Hoje.')); v.replaceChildren(...parts); return; }
   const ul = h('ul', { class: 'hist' });
@@ -842,7 +995,7 @@ function renderHistorico() {
     if (m !== mes) { mes = m; ul.append(h('li', { class: 'month' }, m)); }
     ul.append(h('li', null, h('button', { class: 'dayrow', type: 'button', onclick: () => abrirDia(d) },
       h('span', { class: 'dd' }, h('b', null, d.getDate()), h('small', null, DIAS[diaSemana(d)])),
-      h('span', { class: 'what' }, h('span', { class: 'p' }, nomeSessao(l.sessao)), h('br'), h('span', { class: 'h' }, resumo(l))),
+      h('span', { class: 'what' }, h('span', { class: 'p' }, feito(l) ? nomeSessao(l.sessao) : 'Exercícios avulsos'), h('br'), h('span', { class: 'h' }, resumo(l))),
       h('span', { class: 'st' }, l.nota ? '✎' : ''))));
   }
   parts.push(h('p', { class: 'muted small' }, `${lista.length} ${lista.length === 1 ? 'treino' : 'treinos'}`), ul);
@@ -919,7 +1072,7 @@ function propor5k(texto, dataIso) {
 
 /* ---------- backup ---------- */
 function lembreteBackup() {
-  if (!Object.values(S.registros).some(feito)) return null;
+  if (!Object.values(S.registros).some(feitoAlgo)) return null;
   if (!S.ultimoBackup) return 'Ainda sem backup dos seus treinos.';
   const dias = diffDias(HOJE, new Date(new Date(S.ultimoBackup).setHours(0, 0, 0, 0)));
   return dias > 7 ? `Último backup há ${dias} dias.` : null;
