@@ -1,8 +1,8 @@
 {
  "formato": "tiebreak-plano/1",
  "id": "12s-2026-10",
- "nome": "12 semanas: hipertrofia, corrida e tênis",
- "objetivo": "Ganhar massa muscular e perder gordura, mantendo a corrida e o tênis.",
+ "nome": "12 semanas: hipertrofia, corrida, tênis e padel",
+ "objetivo": "Ganhar massa muscular, perder gordura e melhorar o condicionamento, com corrida, tênis e padel.",
  "inicio": "2026-10-12",
  "principais": [
   "sup1",
@@ -1792,6 +1792,7 @@
   },
   "tenis": {
    "nome": "Tênis ou padel",
+   "curto": "Jogo",
    "tipo": "livre",
    "forte": false,
    "forteSeLongo": true,
@@ -1802,7 +1803,7 @@
      "nome": "Jogo",
      "dur": "cerca de 60 min",
      "alvo": "livre",
-     "explica": "Conta como treino intenso intermitente: sprints curtos, frenagens e mudanças de direção. Se o jogo passar de 90 min, marque como jogo longo: ele passa a contar como treino forte, e o app sugere aliviar o dia seguinte."
+     "explica": "Tênis ou padel. Conta como treino intenso intermitente: sprints curtos, frenagens e mudanças de direção. Se o jogo passar de 90 min, marque como jogo longo: ele passa a contar como treino forte, e o app sugere aliviar o dia seguinte."
     }
    ],
    "registro": {
@@ -1908,13 +1909,7 @@
  },
  "semanaPadrao": [
   {
-   "sessao": "tenis"
-  },
-  {
    "sessao": "sup1"
-  },
-  {
-   "sessao": "int"
   },
   {
    "sessao": "inf1"
@@ -1923,15 +1918,95 @@
    "sessao": "sup2"
   },
   {
-   "sessao": "inf2"
+   "sessao": "tenis"
   },
   {
-   "sessao": "longao"
+   "sessao": "descanso"
+  },
+  {
+   "sessao": "int"
+  },
+  {
+   "sessao": "inf2",
+   "alternar": [
+    "inf2",
+    "inf1"
+   ]
   }
  ],
+ "opcoesSemana": {
+  "rotulo": "Dia de descanso",
+  "descricao": "A escolha fica só neste aparelho. Vale da semana atual em diante.",
+  "opcoes": [
+   {
+    "id": "sex",
+    "rotulo": "Sexta",
+    "resumo": "Seg Sup 1 · Ter Inf 1 · Qua Sup 2 · Qui jogo · Sex descanso · Sáb tiros · Dom perna",
+    "dias": [
+     {
+      "sessao": "sup1"
+     },
+     {
+      "sessao": "inf1"
+     },
+     {
+      "sessao": "sup2"
+     },
+     {
+      "sessao": "tenis"
+     },
+     {
+      "sessao": "descanso"
+     },
+     {
+      "sessao": "int"
+     },
+     {
+      "sessao": "inf2",
+      "alternar": [
+       "inf2",
+       "inf1"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "qua",
+    "rotulo": "Quarta",
+    "resumo": "Seg Sup 1 · Ter Inf 1 · Qua descanso · Qui jogo · Sex Sup 2 · Sáb tiros · Dom perna",
+    "dias": [
+     {
+      "sessao": "sup1"
+     },
+     {
+      "sessao": "inf1"
+     },
+     {
+      "sessao": "descanso"
+     },
+     {
+      "sessao": "tenis"
+     },
+     {
+      "sessao": "sup2"
+     },
+     {
+      "sessao": "int"
+     },
+     {
+      "sessao": "inf2",
+      "alternar": [
+       "inf2",
+       "inf1"
+      ]
+     }
+    ]
+   }
+  ]
+ },
  "semanaVariante": {
   "rotulo": "Tênis de segunda à noite",
-  "descricao": "Terça vira descanso, Superiores 1 na quarta, tiros na quinta e um treino de perna no sábado. O Inferiores 2 pode ficar de fora.",
+  "descricao": "Terça vira descanso, tiros na quarta, Superiores 1 na sexta, um treino de perna no sábado (o feito há mais tempo) e Superiores 2 no domingo.",
   "dias": [
    {
     "sessao": "tenis"
@@ -1940,13 +2015,13 @@
     "sessao": "descanso"
    },
    {
-    "sessao": "sup1"
-   },
-   {
     "sessao": "int"
    },
    {
-    "sessao": "sup2"
+    "sessao": "tenis"
+   },
+   {
+    "sessao": "sup1"
    },
    {
     "sessao": "inf1",
@@ -1956,7 +2031,7 @@
     ]
    },
    {
-    "sessao": "livre"
+    "sessao": "sup2"
    }
   ]
  },
@@ -1973,7 +2048,30 @@
     "trote": "3 min"
    },
    "ritmoTiro": "retorno",
-   "longao": "45 min"
+   "longao": "45 min",
+   "dias": [
+    {
+     "sessao": "tenis"
+    },
+    {
+     "sessao": "sup1"
+    },
+    {
+     "sessao": "int"
+    },
+    {
+     "sessao": "inf1"
+    },
+    {
+     "sessao": "sup2"
+    },
+    {
+     "sessao": "inf2"
+    },
+    {
+     "sessao": "longao"
+    }
+   ]
   },
   {
    "fase": "Adaptação",
@@ -1987,7 +2085,30 @@
     "trote": "3 min"
    },
    "ritmoTiro": "retorno",
-   "longao": "45 min"
+   "longao": "45 min",
+   "dias": [
+    {
+     "sessao": "tenis"
+    },
+    {
+     "sessao": "sup1"
+    },
+    {
+     "sessao": "int"
+    },
+    {
+     "sessao": "inf1"
+    },
+    {
+     "sessao": "sup2"
+    },
+    {
+     "sessao": "inf2"
+    },
+    {
+     "sessao": "longao"
+    }
+   ]
   },
   {
    "fase": "Base",
@@ -1998,7 +2119,30 @@
     "trote": "2:30"
    },
    "ritmoTiro": "retorno",
-   "longao": "55 min"
+   "longao": "55 min",
+   "dias": [
+    {
+     "sessao": "tenis"
+    },
+    {
+     "sessao": "sup1"
+    },
+    {
+     "sessao": "int"
+    },
+    {
+     "sessao": "inf1"
+    },
+    {
+     "sessao": "sup2"
+    },
+    {
+     "sessao": "inf2"
+    },
+    {
+     "sessao": "longao"
+    }
+   ]
   },
   {
    "fase": "Descarga",
@@ -2008,7 +2152,30 @@
    },
    "descarga": true,
    "teste": true,
-   "longao": "40 min"
+   "longao": "40 min",
+   "dias": [
+    {
+     "sessao": "tenis"
+    },
+    {
+     "sessao": "sup1"
+    },
+    {
+     "sessao": "int"
+    },
+    {
+     "sessao": "inf1"
+    },
+    {
+     "sessao": "sup2"
+    },
+    {
+     "sessao": "inf2"
+    },
+    {
+     "sessao": "longao"
+    }
+   ]
   },
   {
    "fase": "Construção",
@@ -2096,9 +2263,13 @@
   }
  ],
  "regras": [
-  "Nunca treinar perna na véspera dos tiros ou do tênis.",
-  "Tênis longo (mais de 90 min): os tiros do dia seguinte viram corrida em Z2.",
-  "Tênis na segunda à noite: ative a chave na aba Semana. Superiores 1 vai para a quarta, os tiros para a quinta e o sábado fica com o treino de perna feito há mais tempo.",
+  "Nunca treinar perna na véspera de tiros, tênis ou padel.",
+  "Jogo longo (mais de 90 min) conta como treino forte: no dia seguinte, nada forte. Tiros viram corrida em Z2.",
+  "Jogo no sábado: ele entra no lugar dos tiros. O domingo continua com perna, pelo menos 24 h depois do jogo.",
+  "Domingo é dia de perna: o app escolhe o treino de inferiores feito há mais tempo.",
+  "Dia de descanso: sexta ou quarta. Escolha em Ajustes.",
+  "Tênis na segunda à noite: ative a chave na aba Semana. Terça vira descanso, tiros na quarta, Superiores 1 na sexta, perna no sábado e Superiores 2 no domingo.",
+  "Mudou o treino de um dia? O app recalcula o resto da semana e mostra as sugestões. Você aceita ou ignora cada uma.",
   "Treino perdido não acumula.",
   "Repetir semana: se fizer menos de 3 dos 5 treinos com progressão (Superiores 1 e 2, Inferiores 1 e 2, tiros), o app sugere repetir. Semanas de descarga nunca repetem. Teste de 5 km não feito passa para a semana seguinte.",
   "Subir carga (progressão dupla): fez o máximo da faixa de repetições em todas as séries? Na semana seguinte, +2,5 kg nas pernas e +1 a 2 kg nos braços.",
