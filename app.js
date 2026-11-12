@@ -1,7 +1,7 @@
 /* Tiebreak · app de treinos. Tudo fica no aparelho (localStorage); backup manual em JSON. */
 'use strict';
 
-const APP_VERSAO = '1.5.0';
+const APP_VERSAO = '1.6.0';
 const KEY = 'tiebreak:v1';
 const DIAS = ['seg', 'ter', 'qua', 'qui', 'sex', 'sáb', 'dom'];
 const DIAS_LONGO = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
@@ -115,6 +115,13 @@ function semanaDoPlano(k) {
   if (nAnt && P.semanas[nAnt - 1].teste && !testeFeitoNaSemana(k - 1) && semanaCal(HOJE) >= k) return Object.assign({}, w, { teste: true, testeAdiado: true });
   return w;
 }
+/* Semana padrão escolhida em Ajustes (ex.: dia de descanso). Fica só no aparelho. */
+function opcaoSemana() {
+  const o = P.opcoesSemana;
+  if (!o || !Array.isArray(o.opcoes)) return null;
+  return o.opcoes.find((x) => x.id === pp().semana) || null;
+}
+function semanaEscolhida() { const op = opcaoSemana(); return op ? op.dias : P.semanaPadrao; }
 /* Último dia em que a sessão foi feita antes de d ('' se nunca). */
 function ultimaVez(id, antes) {
   let u = '';
@@ -128,7 +135,7 @@ function infoDia(d) {
   const i = diaSemana(d);
   let base = { sessao: 'livre' };
   if (w) {
-    const lista = w.dias || (pp().noites[k] && P.semanaVariante ? P.semanaVariante.dias : P.semanaPadrao);
+    const lista = w.dias || (pp().noites[k] && P.semanaVariante ? P.semanaVariante.dias : semanaEscolhida());
     base = Object.assign({}, lista[i]);
     if (Array.isArray(base.alternar) && base.alternar.length) {
       const antes = iso(d);
@@ -151,8 +158,13 @@ function feito(log) {
 }
 /* Para o histórico: conta também exercícios avulsos num dia de corrida, tênis ou descanso. */
 function feitoAlgo(log) { return feito(log) || !!(log && Object.values(log.itens || {}).some((x) => x.feito)); }
+let SIM = null; // trocas simuladas durante o recálculo em cascata (nunca salvas)
 function sugerido(d) { const inf = infoDia(d); const t = pp().trocas[iso(d)]; return t && P.sessoes[t] && !P.sessoes[t].arquivada ? t : inf.base.sessao; }
-function efetiva(d) { const l = reg(d); return (l && l.sessao) || sugerido(d); }
+function efetiva(d) {
+  const l = reg(d);
+  if (SIM && SIM[iso(d)] && !feito(l)) return SIM[iso(d)];
+  return (l && l.sessao) || sugerido(d);
+}
 function forte(id, log) { const s = sess(id); return !!(s.forte || (s.forteSeLongo && log && log.longo)); }
 function grupos(id) { return sess(id).grupos || []; }
 function principal(id) { const s = P.sessoes[id]; return P.principais.includes(id === 'teste5k' ? 'int' : id) || !!(s && s.arquivada && s.tipo === 'forca'); }
@@ -327,11 +339,14 @@ function sugerir(d) {
   const veda = (c, depois) => !!(depois && (sess(c).evitarVespera || []).includes(depois));
   const ok = (c) => !(forte(c) && (fAnt || fProx)) && !grupos(c).some((g) => gAnt.includes(g)) && !veda(c, prox);
   const candidatos = () => {
-    const base = substitutas(inf.w).filter((c) => c !== p && !feitosSemana.has(semTeste(c)) && ok(c));
-    base.sort((a, b) => Number(depois.includes(a)) - Number(depois.includes(b)));
+    // não puxa um treino que ainda está planejado mais adiante na semana (evita repetir o mesmo treino)
+    const base = substitutas(inf.w).filter((c) => c !== p && !feitosSemana.has(semTeste(c)) && !depois.includes(c) && ok(c));
     return base[0];
   };
+  // dia planejado como descanso que ganhou um treino: a primeira opção é voltar ao descanso
+  const descansoPlanejado = inf.base.sessao === 'descanso';
   const alternativa = () => {
+    if (descansoPlanejado) return 'descanso';
     if ((p === 'int' || p === 'teste5k') && fAnt) return 'z2';
     return candidatos() || (forte(p) ? 'z2' : 'descanso');
   };
@@ -341,13 +356,13 @@ function sugerir(d) {
   const pBase = p === 'teste5k' ? 'int' : p;
   if (principal(p) && feitosSemana.has(pBase)) {
     const quando = semana.find((x) => x.getTime() !== d.getTime() && (feitoEm(x) === p || (pBase === 'int' && feitoEm(x) === 'int')));
-    const novo = candidatos() || (p === 'int' ? 'z2' : 'descanso');
+    const novo = (descansoPlanejado && 'descanso') || candidatos() || (p === 'int' ? 'z2' : 'descanso');
     return { d, de: p, para: novo, motivo: `${nomeCurto(p)} já feito ${quando ? 'na ' + DIAS_LONGO[diaSemana(quando)].toLowerCase() : 'nesta semana'}` };
   }
   // 2. dois fortes seguidos
   if (forte(p) && fAnt) return { d, de: p, para: alternativa(), motivo: `dois fortes seguidos (${nomeCurto(pAnt)} na ${dAnt})` };
   // 2b. perna na véspera de tiros ou tênis
-  if (veda(p, prox)) return { d, de: p, para: candidatos() || 'descanso', motivo: `${nomeCurto(p)} na véspera de ${nomeCurto(prox)}` };
+  if (veda(p, prox)) return { d, de: p, para: (descansoPlanejado && 'descanso') || candidatos() || 'descanso', motivo: `${nomeCurto(p)} na véspera de ${nomeCurto(prox)}` };
   if (pAnt && feitoEm(ant) && veda(pAnt, p) && (p === 'int' || p === 'teste5k') && P.sessoes.z2) return { d, de: p, para: 'z2', motivo: `${nomeCurto(pAnt)} ontem` };
   // 3. mesmo grupo muscular em menos de 48 h
   if (grupos(p).some((g) => gAnt.includes(g))) return { d, de: p, para: alternativa(), motivo: 'mesmo grupo muscular em menos de 48 h' };
@@ -362,20 +377,75 @@ function sugerir(d) {
   }
   return null;
 }
-function sugestaoAtual() {
-  for (const d of [HOJE, addDays(HOJE, 1)]) {
-    const s = sugerir(d);
-    if (s && s.para !== s.de && pp().ignoradas[iso(d)] !== s.de + '>' + s.para) return s;
-  }
-  return null;
+/* Recálculo em cascata: de hoje até 6 dias à frente, cada sugestão aceita (em simulação) muda o que vem depois.
+   Nada é salvo aqui; a usuária aceita ou ignora cada sugestão. */
+const DIAS_CASCATA = 7;
+function cascata() {
+  const out = [];
+  SIM = {};
+  try {
+    for (let i = 0; i < DIAS_CASCATA; i++) {
+      const d = addDays(HOJE, i);
+      const s = sugerir(d);
+      if (!s || s.para === s.de) continue;
+      if (pp().ignoradas[iso(d)] === s.de + '>' + s.para) continue;
+      out.push(s);
+      SIM[iso(d)] = s.para;
+    }
+  } finally { SIM = null; }
+  return out;
 }
-function aceitar(s) {
+function quandoTxt(d) {
+  const dd = diffDias(d, HOJE);
+  return dd === 0 ? 'Hoje' : dd === 1 ? 'Amanhã' : `${DIAS_LONGO[diaSemana(d)]} ${d.getDate()}`;
+}
+/* O que evitar no dia seguinte a d, pelo treino feito (ou previsto) em d. */
+function evitarDepois(d) {
+  const l = reg(d);
+  const x = feito(l) ? l.sessao : d >= HOJE ? efetiva(d) : null;
+  if (!x || x === 'descanso' || x === 'livre') return [];
+  const out = [];
+  if (forte(x, l)) out.push(x === 'tenis' ? 'treino forte (o jogo foi longo); tiros viram Z2' : 'outro treino forte; tiros viram Z2');
+  const g = grupos(x);
+  if (g.length) out.push(`${g.join(' e ')} de novo (menos de 48 h)`);
+  return out;
+}
+/* O que não fazer em d por causa do dia seguinte (ex.: perna na véspera de tiros ou de jogo). */
+function evitarVespera(d) {
+  const prox = addDays(d, 1);
+  const p = feito(reg(prox)) ? reg(prox).sessao : efetiva(prox);
+  if (!p || p === 'descanso' || p === 'livre') return [];
+  const vetadas = substitutas(infoDia(d).w).filter((c) => (sess(c).evitarVespera || []).includes(p));
+  const gr = [...new Set(vetadas.flatMap(grupos))];
+  return gr.length ? [`${gr.join(' e ')} (amanhã tem ${nomeCurto(p).toLowerCase()})`] : [];
+}
+function aplicarTroca(s) {
   pp().trocas[iso(s.d)] = s.para;
   const l = reg(s.d);
   if (l && !feito(l)) l.sessao = s.para;
+}
+function aceitar(s) {
+  aplicarTroca(s);
   salvar();
-  toast(`${s.d.getTime() === HOJE.getTime() ? 'Hoje' : 'Amanhã'}: ${nomeSessao(s.para)}`);
+  toast(`${quandoTxt(s.d)}: ${nomeSessao(s.para)}`);
   renderTudo();
+}
+function aceitarTodas(lista) {
+  for (const s of lista) aplicarTroca(s);
+  salvar();
+  toast(lista.length === 1 ? 'Sugestão aplicada' : `${lista.length} sugestões aplicadas`);
+  renderTudo();
+}
+function cartaoCascata(lista) {
+  if (!lista.length) return null;
+  return h('section', { class: 'notice sugs' },
+    h('p', { class: 'sugs-tit' }, h('b', null, 'Resto da semana'), h('span', { class: 'muted' }, ' · sugestões depois das mudanças')),
+    h('ul', null, lista.map((s) => h('li', null,
+      h('p', null, h('b', null, `${quandoTxt(s.d)}: ${nomeSessao(s.para)}`), h('span', { class: 'muted' }, ` em vez de ${nomeCurto(s.de)} · ${s.motivo}`)),
+      h('div', { class: 'acts' },
+        h('button', { class: 'btn small solid', type: 'button', onclick: () => aceitar(s) }, 'Aceitar'),
+        h('button', { class: 'btn small ghost', type: 'button', onclick: () => ignorar(s) }, 'Ignorar'))))),
+    lista.length > 1 ? h('div', { class: 'acts' }, h('button', { class: 'btn small', type: 'button', onclick: () => aceitarTodas(lista) }, 'Aceitar todas')) : null);
 }
 function ignorar(s) { pp().ignoradas[iso(s.d)] = s.de + '>' + s.para; salvar(); renderTudo(); }
 
@@ -478,18 +548,13 @@ function renderHoje() {
       h('div', { class: 'acts' },
         h('button', { class: 'btn small solid', type: 'button', onclick: () => { pp().repeticoes.push(rep.k); salvar(); toast(`Semana ${rep.n} repetida`); renderTudo(); } }, 'Repetir'),
         h('button', { class: 'btn small ghost', type: 'button', onclick: () => { pp().semanasIgnoradas[rep.k] = true; salvar(); renderTudo(); } }, 'Seguir'))));
-    const sug = sugestaoAtual();
-    if (sug) {
-      const quando = sug.d.getTime() === HOJE.getTime() ? 'Hoje' : 'Amanhã';
-      parts.push(h('div', { class: 'notice' },
-        h('p', null, h('b', null, `${quando}: ${nomeSessao(sug.para)} em vez de ${nomeCurto(sug.de)}`), h('span', { class: 'muted' }, ` · ${sug.motivo}`)),
-        h('div', { class: 'acts' },
-          h('button', { class: 'btn small solid', type: 'button', onclick: () => aceitar(sug) }, 'Aceitar'),
-          h('button', { class: 'btn small ghost', type: 'button', onclick: () => ignorar(sug) }, 'Ignorar'))));
-    }
     const lembrete = lembreteBackup();
     if (lembrete) parts.push(h('div', { class: 'notice calm' }, h('p', null, lembrete), h('button', { class: 'link', type: 'button', onclick: fazerBackup }, 'fazer agora')));
   }
+
+  // recálculo em cascata (de hoje até 6 dias à frente)
+  const noIntervalo = d >= HOJE && diffDias(d, HOJE) < DIAS_CASCATA;
+  if (ehHoje || noIntervalo) { const c = cartaoCascata(cascata()); if (c) parts.push(c); }
 
   // escolha do treino
   const sel = h('select', { class: 'text', id: 'sel-sessao' });
@@ -505,10 +570,20 @@ function renderHoje() {
     const l = garantir(d, sel.value);
     l.sessao = sel.value;
     tocar(l);
+    const n = d >= HOJE ? cascata().length : 0;
+    if (n) toast(n === 1 ? '1 sugestão para os próximos dias' : `${n} sugestões para os próximos dias`);
     renderHoje();
   });
   parts.push(h('div', { class: 'picker' }, h('label', { for: 'sel-sessao' }, 'O que você fez'), sel));
   if (tipo !== planejado && planejado !== 'livre') parts.push(h('p', { class: 'planned' }, `Planejado: ${nomeSessao(planejado)}`));
+
+  // o que evitar (véspera e dia seguinte)
+  if (inf.w && d >= addDays(HOJE, -1)) {
+    const hojeEvita = feito(log) ? [] : evitarVespera(d);
+    const amanha = evitarDepois(d);
+    if (hojeEvita.length) parts.push(h('p', { class: 'evitar' }, h('b', null, 'Hoje, evite: '), hojeEvita.join(' · ')));
+    if (amanha.length) parts.push(h('p', { class: 'evitar' }, h('b', null, 'Amanhã, evite: '), amanha.join(' · ')));
+  }
 
   // conteúdo
   if (s.tipo === 'forca') parts.push(...conteudoForca(d, tipo, inf));
@@ -934,6 +1009,7 @@ function renderSemana() {
     h('button', { class: 'icon-btn', type: 'button', 'aria-label': 'Próxima semana', disabled: k > ultimaSemanaCal(), onclick: () => { semanaVista++; renderSemana(); } }, '›'))];
 
   if (n) parts.push(h('p', { class: 'muted small center' }, `${principaisFeitos(k)} de ${P.principais.length} treinos principais feitos`));
+  if (k === semanaCal(HOJE)) { const c = cartaoCascata(cascata()); if (c) parts.push(c); }
 
   parts.push(h('ul', { class: 'days' }, Array.from({ length: 7 }, (_, i) => {
     const d = addDays(ini, i);
@@ -1017,6 +1093,22 @@ function renderAjustes() {
     h('p', { class: 'small muted' }, ub ? `Último backup em ${fmtBarra(ub)} às ${pad(ub.getHours())}:${pad(ub.getMinutes())}.` : 'Nenhum backup feito ainda.'),
     h('p', { class: 'small muted' }, 'Os dados ficam só neste aparelho. O backup gera um arquivo para guardar fora do celular, no iCloud Drive ou no Google Drive.'),
     h('div', { class: 'row wrap' }, h('button', { class: 'btn solid', type: 'button', onclick: fazerBackup }, 'Fazer backup'), h('button', { class: 'btn', type: 'button', onclick: () => $('#f-restaurar').click() }, 'Restaurar'))));
+
+  // semana padrão (dia de descanso), só neste aparelho
+  if (P.opcoesSemana && Array.isArray(P.opcoesSemana.opcoes) && P.opcoesSemana.opcoes.length > 1) {
+    const os = P.opcoesSemana;
+    const atual = opcaoSemana() || os.opcoes[0];
+    const selD = h('select', { class: 'text', id: 'sel-semana', 'aria-label': os.rotulo || 'Semana padrão' });
+    for (const o of os.opcoes) selD.append(h('option', { value: o.id, selected: o.id === atual.id }, o.rotulo));
+    const res = h('p', { class: 'small muted' }, atual.resumo || '');
+    selD.addEventListener('change', () => {
+      pp().semana = selD.value; salvar();
+      res.textContent = (opcaoSemana() || {}).resumo || '';
+      toast(`${os.rotulo || 'Semana'}: ${selD.options[selD.selectedIndex].text}`);
+    });
+    parts.push(h('section', { class: 'card' }, h('h3', null, os.rotulo || 'Semana padrão'),
+      os.descricao ? h('p', { class: 'small muted' }, os.descricao) : null, selD, res));
+  }
 
   // horários (ficam só neste aparelho)
   const DIAS_H = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
@@ -1154,6 +1246,13 @@ function validarPlano(p) {
     for (const d of w.dias) if (!p.sessoes[d.sessao] && !['descanso', 'livre'].includes(d.sessao)) return `Sessão desconhecida na semana ${i + 1}: ${d.sessao}`;
   }
   for (const d of p.semanaPadrao) if (!p.sessoes[d.sessao] && !['descanso', 'livre'].includes(d.sessao)) return `Sessão desconhecida: ${d.sessao}`;
+  if (p.opcoesSemana) {
+    if (!Array.isArray(p.opcoesSemana.opcoes)) return 'As opções de semana estão em formato errado.';
+    for (const o of p.opcoesSemana.opcoes) {
+      if (!o || typeof o.id !== 'string' || !Array.isArray(o.dias) || o.dias.length !== 7) return 'Cada opção de semana precisa de um id e 7 dias.';
+      for (const d of o.dias) if (!p.sessoes[d.sessao] && !['descanso', 'livre'].includes(d.sessao)) return `Sessão desconhecida na opção ${o.id}: ${d.sessao}`;
+    }
+  }
   if (!p.sessoes || !p.exercicios) return 'Faltam sessões ou exercícios.';
   for (const s of Object.values(p.sessoes)) for (const b of s.blocos || []) for (const x of (b.biset ? b.ex : b.ex ? [b] : [])) if (!p.exercicios[x.ex]) return `Exercício sem ficha: ${x.ex}`;
   if (!p.sessoes.livre) p.sessoes.livre = { nome: 'Outro treino', tipo: 'livre', blocos: [], registro: { rotulo: 'O que você fez', placeholder: '' } };

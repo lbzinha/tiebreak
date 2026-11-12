@@ -1,5 +1,5 @@
 /* Tiebreak · cache para funcionar offline. Ao publicar uma versão nova, mude VERSAO. */
-const VERSAO = 'tiebreak-1.5.0';
+const VERSAO = 'tiebreak-1.6.0';
 const ARQUIVOS = [
   './', 'index.html', 'styles.css', 'app.js', 'plano.json', 'manifest.webmanifest',
   'icons/icon.svg', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',

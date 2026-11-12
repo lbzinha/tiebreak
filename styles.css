@@ -128,6 +128,14 @@ select.text { appearance: none; -webkit-appearance: none; padding-right: 32px;
 .notice p { flex: 1 1 12rem; }
 .notice.calm { background: transparent; border-color: var(--line); color: var(--muted); }
 .notice .acts { display: flex; gap: 6px; }
+/* recálculo em cascata */
+.notice.sugs { flex-direction: column; align-items: stretch; gap: 8px; }
+.notice.sugs .sugs-tit { flex: none; margin: 0; }
+.sugs ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.sugs li { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; padding-top: 8px; border-top: 1px solid color-mix(in srgb, var(--ball) 35%, transparent); }
+.sugs li p { flex: 1 1 12rem; margin: 0; }
+.evitar { margin: 0; font-size: .85rem; color: var(--muted); }
+.evitar b { color: var(--ink); font-weight: 600; }
 
 /* cabeçalho do dia */
 .day-head { display: flex; flex-direction: column; gap: 6px; }
